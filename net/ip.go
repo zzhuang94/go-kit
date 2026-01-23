@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// ClientIp 获取客户端 IP 地址 / Get client IP address
 func ClientIp(req *http.Request) string {
 	ip := req.Header.Get("X-real-ip")
 	if ip == "" || strings.ToUpper(ip) == "UNKNOWN" {
@@ -27,6 +28,7 @@ func ClientIp(req *http.Request) string {
 	return ip
 }
 
+// LocalIp 获取本机 IP 地址 / Get local IP address
 func LocalIp() string {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {

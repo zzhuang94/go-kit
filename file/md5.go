@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-// Md5 计算文件的 MD5 值
+// Md5 计算文件的 MD5 值 / Calculate MD5 hash of file
 func Md5(path string) (string, error) {
 	f, err := os.Open(path)
 	if err != nil {

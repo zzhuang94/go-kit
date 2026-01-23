@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-// TarDir 将目录打包为 tar 文件
+// TarDir 将目录打包为 tar 文件 / Pack directory into tar file
 func TarDir(srcDir, dstFile string) error {
 	file, err := os.Create(dstFile)
 	if err != nil {
@@ -46,7 +46,7 @@ func TarDir(srcDir, dstFile string) error {
 	})
 }
 
-// TarGzDir 将目录打包为 tar.gz 压缩文件
+// TarGzDir 将目录打包为 tar.gz 压缩文件 / Pack directory into tar.gz compressed file
 func TarGzDir(srcDir, dstFile string) error {
 	file, err := os.Create(dstFile)
 	if err != nil {
@@ -86,7 +86,7 @@ func TarGzDir(srcDir, dstFile string) error {
 	})
 }
 
-// Untar 解压 tar 文件到指定目录
+// Untar 解压 tar 文件到指定目录 / Extract tar file to specified directory
 func Untar(srcFile, dstDir string) error {
 	file, err := os.Open(srcFile)
 	if err != nil {
@@ -133,7 +133,7 @@ func Untar(srcFile, dstDir string) error {
 	return nil
 }
 
-// UntarGz 解压 tar.gz 压缩文件到指定目录
+// UntarGz 解压 tar.gz 压缩文件到指定目录 / Extract tar.gz compressed file to specified directory
 func UntarGz(srcFile, dstDir string) error {
 	file, err := os.Open(srcFile)
 	if err != nil {

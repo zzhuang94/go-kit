@@ -15,6 +15,7 @@ type MysqlCfg struct {
 	Log     bool   `json:"log"`
 }
 
+// ConnGorm 使用 GORM 连接 MySQL / Connect MySQL using GORM
 func (c *MysqlCfg) ConnGorm() (*gorm.DB, error) {
 	logMode := logger.Silent
 	if c.Log {
@@ -31,6 +32,7 @@ func (c *MysqlCfg) ConnGorm() (*gorm.DB, error) {
 	return db, nil
 }
 
+// ConnXorm 使用 XORM 连接 MySQL / Connect MySQL using XORM
 func (c *MysqlCfg) ConnXorm() (*xorm.Engine, error) {
 	db, err := xorm.NewEngine("mysql", c.DSN)
 	if err != nil {
