@@ -13,75 +13,16 @@ func TestTrim(t *testing.T) {
 	}
 }
 
-func TestSubstring(t *testing.T) {
+func TestSub(t *testing.T) {
 	s := "Hello, World"
-	if Substring(s, 0, 5) != "Hello" {
+	if Sub(s, 0, 5) != "Hello" {
 		t.Error("Substring failed")
 	}
-	if Substring(s, -5, -1) != "Worl" {
+	if Sub(s, -5, -1) != "Worl" {
 		t.Error("Substring with negative index failed")
 	}
-	if Substring(s, 10, 5) != "" {
+	if Sub(s, 10, 5) != "" {
 		t.Error("Substring with invalid range failed")
-	}
-}
-
-func TestReplaceAll(t *testing.T) {
-	s := "hello world hello"
-	result := ReplaceAll(s, "hello", "hi")
-	if result != "hi world hi" {
-		t.Errorf("Expected 'hi world hi', got %q", result)
-	}
-}
-
-func TestReplaceN(t *testing.T) {
-	s := "hello world hello"
-	result := ReplaceN(s, "hello", "hi", 1)
-	if result != "hi world hello" {
-		t.Errorf("Expected 'hi world hello', got %q", result)
-	}
-}
-
-func TestContains(t *testing.T) {
-	if !Contains("hello world", "world") {
-		t.Error("Contains failed")
-	}
-	if Contains("hello world", "xyz") {
-		t.Error("Contains failed")
-	}
-}
-
-func TestContainsIgnoreCase(t *testing.T) {
-	if !ContainsIgnoreCase("Hello World", "hello") {
-		t.Error("ContainsIgnoreCase failed")
-	}
-	if !ContainsIgnoreCase("Hello World", "WORLD") {
-		t.Error("ContainsIgnoreCase failed")
-	}
-}
-
-func TestStartsWith(t *testing.T) {
-	if !StartsWith("hello world", "hello") {
-		t.Error("StartsWith failed")
-	}
-	if StartsWith("hello world", "world") {
-		t.Error("StartsWith failed")
-	}
-}
-
-func TestEndsWith(t *testing.T) {
-	if !EndsWith("hello world", "world") {
-		t.Error("EndsWith failed")
-	}
-	if EndsWith("hello world", "hello") {
-		t.Error("EndsWith failed")
-	}
-}
-
-func TestRepeat(t *testing.T) {
-	result := Repeat("ab", 3)
-	if result != "ababab" {
-		t.Errorf("Expected 'ababab', got %q", result)
 	}
 }
 
@@ -114,16 +55,6 @@ func TestTruncate(t *testing.T) {
 	}
 	if Truncate("hi", 5) != "hi" {
 		t.Error("Truncate failed")
-	}
-}
-
-func TestTruncateWithEllipsis(t *testing.T) {
-	result := TruncateWithEllipsis("hello world", 8)
-	if result != "hello..." {
-		t.Errorf("Expected 'hello...', got %q", result)
-	}
-	if TruncateWithEllipsis("hi", 5) != "hi" {
-		t.Error("TruncateWithEllipsis failed")
 	}
 }
 
@@ -251,5 +182,119 @@ func TestIsBlank(t *testing.T) {
 	}
 	if IsBlank("hello") {
 		t.Error("IsBlank failed")
+	}
+}
+
+func TestMd5(t *testing.T) {
+	result := Md5("hello")
+	if len(result) != 32 {
+		t.Errorf("Expected MD5 hash length 32, got %d", len(result))
+	}
+
+	result2 := Md5(map[string]string{"key": "value"})
+	if len(result2) != 32 {
+		t.Errorf("Expected MD5 hash length 32, got %d", len(result2))
+	}
+
+	// Same input should produce same hash
+	result3 := Md5("hello")
+	if result != result3 {
+		t.Error("MD5 should produce consistent results")
+	}
+}
+
+func TestUuid(t *testing.T) {
+	uuid1 := Uuid()
+	uuid2 := Uuid()
+
+	if len(uuid1) == 0 {
+		t.Error("Uuid should not be empty")
+	}
+	if len(uuid2) == 0 {
+		t.Error("Uuid should not be empty")
+	}
+
+	// UUIDs should be different
+	if uuid1 == uuid2 {
+		t.Error("Uuid should generate unique values")
+	}
+
+	// UUID should be hexadecimal string
+	if len(uuid1) < 32 {
+		t.Errorf("Uuid length should be at least 32, got %d", len(uuid1))
+	}
+}
+
+func TestSplitLines(t *testing.T) {
+	// Test basic splitting
+	input := "line1\nline2\nline3"
+	result := SplitLines(input)
+	if len(result) != 3 {
+		t.Errorf("Expected 3 lines, got %d", len(result))
+	}
+	if result[0] != "line1" || result[1] != "line2" || result[2] != "line3" {
+		t.Error("SplitLines failed to split correctly")
+	}
+
+	// Test with empty lines
+	input2 := "line1\n\nline2\n  \nline3"
+	result2 := SplitLines(input2)
+	if len(result2) != 3 {
+		t.Errorf("Expected 3 lines (empty lines filtered), got %d", len(result2))
+	}
+
+	// Test with duplicate lines
+	input3 := "line1\nline2\nline1\nline3"
+	result3 := SplitLines(input3)
+	if len(result3) != 3 {
+		t.Errorf("Expected 3 unique lines, got %d", len(result3))
+	}
+
+	// Test with whitespace trimming
+	input4 := "  line1  \n  line2  \n  line3  "
+	result4 := SplitLines(input4)
+	if len(result4) != 3 {
+		t.Errorf("Expected 3 lines, got %d", len(result4))
+	}
+	if result4[0] != "line1" || result4[1] != "line2" || result4[2] != "line3" {
+		t.Error("SplitLines failed to trim whitespace")
+	}
+
+	// Test empty string
+	result5 := SplitLines("")
+	if len(result5) != 0 {
+		t.Errorf("Expected 0 lines for empty string, got %d", len(result5))
+	}
+}
+
+func TestParseAndFormatJson(t *testing.T) {
+	// Test valid JSON
+	validJSON := `{"name":"test","age":30}`
+	result, err := ParseAndFormatJson(validJSON)
+	if err != nil {
+		t.Errorf("ParseAndFormatJson failed with valid JSON: %v", err)
+	}
+	if result == "" {
+		t.Error("ParseAndFormatJson should return formatted JSON")
+	}
+
+	// Test invalid JSON
+	invalidJSON := `{name:test}`
+	result2, err2 := ParseAndFormatJson(invalidJSON)
+	if err2 == nil {
+		t.Error("ParseAndFormatJson should return error for invalid JSON")
+	}
+	if result2 != invalidJSON {
+		t.Error("ParseAndFormatJson should return original string on error")
+	}
+
+	// Test with array
+	arrayJSON := `[1,2,3]`
+	result3, err3 := ParseAndFormatJson(arrayJSON)
+	if err3 != nil {
+		t.Errorf("ParseAndFormatJson failed with array JSON: %v", err3)
+	}
+	if result3 == "" {
+		t.Error("ParseAndFormatJson should return formatted JSON for array")
 	}
 }

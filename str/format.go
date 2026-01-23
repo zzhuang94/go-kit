@@ -1,9 +1,19 @@
 package str
 
 import (
+	"encoding/json"
 	"strings"
 	"unicode"
 )
+
+func ParseAndFormatJson(str string) (string, error) {
+	var v any
+	if err := json.Unmarshal([]byte(str), &v); err != nil {
+		return str, err
+	}
+	bs, err := json.Marshal(v)
+	return string(bs), err
+}
 
 // CamelCase 转换为驼峰命名 / Convert to camelCase
 func CamelCase(s string) string {

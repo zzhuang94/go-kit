@@ -5,19 +5,14 @@ Provides common string manipulation utility functions.
 ## Basic Operations
 
 - `Trim(s string) string` - Trim whitespace from both ends of string
-- `Substring(s string, start, end int) string` - Extract substring (supports negative indices)
-- `ReplaceAll(s, old, new string) string` - Replace all occurrences of string
-- `ReplaceN(s, old, new string, n int) string` - Replace first N occurrences of string
-- `Contains(s, substr string) bool` - Check if string contains substring
-- `ContainsIgnoreCase(s, substr string) bool` - Check if string contains substring (case insensitive)
-- `StartsWith(s, prefix string) bool` - Check if string starts with prefix
-- `EndsWith(s, suffix string) bool` - Check if string ends with suffix
-- `Repeat(s string, count int) string` - Repeat string specified number of times
+- `Sub(s string, start, end int) string` - Extract substring (supports negative indices)
 - `Reverse(s string) string` - Reverse string
 - `PadLeft(s string, length int, pad string) string` - Pad string to specified length on the left
 - `PadRight(s string, length int, pad string) string` - Pad string to specified length on the right
 - `Truncate(s string, length int) string` - Truncate string to specified length
-- `TruncateWithEllipsis(s string, length int) string` - Truncate string and add ellipsis
+- `SplitLines(str string) []string` - Split string by lines, remove empty lines and duplicates, trim whitespace
+- `Md5(params any) string` - Calculate MD5 hash of parameters (after JSON serialization)
+- `Uuid() string` - Generate UUID v4 string
 
 ## Formatting
 
@@ -26,6 +21,7 @@ Provides common string manipulation utility functions.
 - `KebabCase(s string) string` - Convert to kebab-case
 - `TitleCase(s string) string` - Convert to Title Case (first letter of each word capitalized)
 - `Pluralize(s string) string` - Simple pluralization (basic rules)
+- `ParseAndFormatJson(str string) (string, error)` - Parse and format JSON string
 
 ## Validation
 
@@ -52,8 +48,10 @@ import (
 func main() {
 	// Basic operations
 	fmt.Println(str.Trim("  hello  "))              // "hello"
-	fmt.Println(str.Substring("Hello, World", 0, 5)) // "Hello"
+	fmt.Println(str.Sub("Hello, World", 0, 5))      // "Hello"
 	fmt.Println(str.Reverse("hello"))                // "olleh"
+	fmt.Println(str.Md5("hello"))                    // "5d41402abc4b2a76b9719d911017c592"
+	fmt.Println(str.Uuid())                          // "a1b2c3d4e5f6..."
 	
 	// Formatting
 	fmt.Println(str.CamelCase("hello_world"))       // "helloWorld"

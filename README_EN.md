@@ -11,7 +11,7 @@
 ## ✨ Features
 
 - 🎯 **Ready to Use** - No complex configuration, import and use immediately
-- 🔧 **Feature Rich** - Covers 11+ modules including file, string, data structures, time, encryption, and more
+- 🔧 **Feature Rich** - Covers 9+ modules including file, string, data structures, time, encryption, and more
 - 🚀 **High Performance** - Built on Go standard library with excellent performance
 - 📚 **Well Documented** - Every function has bilingual comments and detailed documentation
 - 🧪 **Well Tested** - Complete unit test coverage
@@ -38,14 +38,8 @@ Convenient time operation utilities supporting formatting, parsing, calculations
 ### 🔐 Crypto Tools (crypto)
 Complete encryption toolkit including SHA series hashing (SHA1, SHA256, SHA512), AES encryption/decryption, and Base64 encoding/decoding.
 
-### 🔄 Type Conversion (convert)
-Simple type conversion utilities supporting conversions between strings and numbers, booleans, and byte arrays.
-
-### 📄 JSON Operations (json)
-Convenient JSON processing utilities supporting serialization, deserialization, pretty printing, and field operations (get, set, merge).
-
-### 🎲 Random Number Generation (rand)
-Flexible random number generation utilities supporting random integers, floats, string generation, and random element selection.
+### 🛠️ General Utilities (lib)
+Practical general utility collection including random operations (random selection, shuffle), Shell command execution, log management (based on logrus with log rotation), distributed locks (Redis-based), rate limiter (supports Redis and local mode), and distributed election (Redis-based).
 
 ### 💾 Database Operations (db)
 Database connection utilities supporting MySQL (GORM, XORM) and Redis (standalone, cluster) connections.
@@ -105,9 +99,7 @@ Each module has detailed documentation and usage examples. Please refer to the R
 - [Algorithms & Data Structures (algo)](./algo/README_EN.md)
 - [Time Handling (time)](./time/README_EN.md)
 - [Crypto Tools (crypto)](./crypto/README_EN.md)
-- [Type Conversion (convert)](./convert/README_EN.md)
-- [JSON Operations (json)](./json/README_EN.md)
-- [Random Number Generation (rand)](./rand/README_EN.md)
+- [General Utilities (lib)](./lib/README_EN.md)
 - [Database Operations (db)](./db/README_EN.md)
 - [Network Operations (net)](./net/README_EN.md)
 

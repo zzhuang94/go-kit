@@ -5,19 +5,14 @@
 ## 基础操作
 
 - `Trim(s string) string` - 去除首尾空白字符
-- `Substring(s string, start, end int) string` - 截取子串（支持负数索引）
-- `ReplaceAll(s, old, new string) string` - 替换所有匹配的字符串
-- `ReplaceN(s, old, new string, n int) string` - 替换前N个匹配的字符串
-- `Contains(s, substr string) bool` - 检查字符串是否包含子串
-- `ContainsIgnoreCase(s, substr string) bool` - 检查字符串是否包含子串（忽略大小写）
-- `StartsWith(s, prefix string) bool` - 检查字符串是否以指定前缀开始
-- `EndsWith(s, suffix string) bool` - 检查字符串是否以指定后缀结束
-- `Repeat(s string, count int) string` - 重复字符串指定次数
+- `Sub(s string, start, end int) string` - 截取子串（支持负数索引）
 - `Reverse(s string) string` - 反转字符串
 - `PadLeft(s string, length int, pad string) string` - 左填充字符串到指定长度
 - `PadRight(s string, length int, pad string) string` - 右填充字符串到指定长度
 - `Truncate(s string, length int) string` - 截断字符串到指定长度
-- `TruncateWithEllipsis(s string, length int) string` - 截断字符串并添加省略号
+- `SplitLines(str string) []string` - 按行分割字符串，去除空行和重复行，并去除每行的首尾空白
+- `Md5(params any) string` - 计算参数的 MD5 哈希值（JSON 序列化后计算）
+- `Uuid() string` - 生成 UUID v4 字符串
 
 ## 格式化
 
@@ -26,6 +21,7 @@
 - `KebabCase(s string) string` - 转换为短横线命名
 - `TitleCase(s string) string` - 转换为标题格式（每个单词首字母大写）
 - `Pluralize(s string) string` - 简单的复数化（基础规则）
+- `ParseAndFormatJson(str string) (string, error)` - 解析并格式化 JSON 字符串
 
 ## 验证
 
@@ -52,8 +48,10 @@ import (
 func main() {
 	// 基础操作
 	fmt.Println(str.Trim("  hello  "))              // "hello"
-	fmt.Println(str.Substring("Hello, World", 0, 5)) // "Hello"
+	fmt.Println(str.Sub("Hello, World", 0, 5))      // "Hello"
 	fmt.Println(str.Reverse("hello"))                // "olleh"
+	fmt.Println(str.Md5("hello"))                    // "5d41402abc4b2a76b9719d911017c592"
+	fmt.Println(str.Uuid())                          // "a1b2c3d4e5f6..."
 	
 	// 格式化
 	fmt.Println(str.CamelCase("hello_world"))       // "helloWorld"

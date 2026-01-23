@@ -1,7 +1,12 @@
 package str
 
 import (
+	"crypto/md5"
+	"encoding/json"
+	"fmt"
 	"strings"
+
+	uuid "github.com/nu7hatch/gouuid"
 )
 
 // Trim 去除首尾空白字符 / Trim whitespace from both ends of string
@@ -9,8 +14,21 @@ func Trim(s string) string {
 	return strings.TrimSpace(s)
 }
 
-// Substring 截取子串，支持负数索引 / Extract substring, supports negative indices
-func Substring(s string, start, end int) string {
+func Md5(params any) string {
+	data, _ := json.Marshal(params)
+	mbs := md5.Sum(data)
+	return fmt.Sprintf("%x", mbs)
+}
+func Uuid() string {
+	u4, err := uuid.NewV4()
+	if err != nil {
+		panic(err.Error())
+	}
+	return fmt.Sprintf("%x", u4[0:])
+}
+
+// Sub 截取子串，支持负数索引 / Extract substring, supports negative indices
+func Sub(s string, start, end int) string {
 	runes := []rune(s)
 	length := len(runes)
 	if start < 0 {
@@ -29,41 +47,6 @@ func Substring(s string, start, end int) string {
 		return ""
 	}
 	return string(runes[start:end])
-}
-
-// ReplaceAll 替换所有匹配的字符串 / Replace all occurrences of string
-func ReplaceAll(s, old, new string) string {
-	return strings.ReplaceAll(s, old, new)
-}
-
-// ReplaceN 替换前N个匹配的字符串 / Replace first N occurrences of string
-func ReplaceN(s, old, new string, n int) string {
-	return strings.Replace(s, old, new, n)
-}
-
-// Contains 检查字符串是否包含子串 / Check if string contains substring
-func Contains(s, substr string) bool {
-	return strings.Contains(s, substr)
-}
-
-// ContainsIgnoreCase 检查字符串是否包含子串（忽略大小写）/ Check if string contains substring (case insensitive)
-func ContainsIgnoreCase(s, substr string) bool {
-	return strings.Contains(strings.ToLower(s), strings.ToLower(substr))
-}
-
-// StartsWith 检查字符串是否以指定前缀开始 / Check if string starts with prefix
-func StartsWith(s, prefix string) bool {
-	return strings.HasPrefix(s, prefix)
-}
-
-// EndsWith 检查字符串是否以指定后缀结束 / Check if string ends with suffix
-func EndsWith(s, suffix string) bool {
-	return strings.HasSuffix(s, suffix)
-}
-
-// Repeat 重复字符串指定次数 / Repeat string specified number of times
-func Repeat(s string, count int) string {
-	return strings.Repeat(s, count)
 }
 
 // Reverse 反转字符串 / Reverse string
@@ -105,17 +88,19 @@ func Truncate(s string, length int) string {
 	return string(runes[:length])
 }
 
-// TruncateWithEllipsis 截断字符串并添加省略号 / Truncate string and add ellipsis
-func TruncateWithEllipsis(s string, length int) string {
-	if len(s) <= length {
-		return s
+func SplitLines(str string) []string {
+	ans := make([]string, 0)
+	m := make(map[string]bool)
+	for line := range strings.SplitSeq(str, "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+		if _, ok := m[line]; ok {
+			continue
+		}
+		m[line] = true
+		ans = append(ans, line)
 	}
-	runes := []rune(s)
-	if len(runes) <= length {
-		return s
-	}
-	if length <= 3 {
-		return strings.Repeat(".", length)
-	}
-	return string(runes[:length-3]) + "..."
+	return ans
 }
