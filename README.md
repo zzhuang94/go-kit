@@ -1,71 +1,67 @@
-# go-kit
+# 🚀 go-kit
 
-Go 语言常用工具库集合，提供文件操作、字符串处理、数据结构、时间处理、加密等常用功能。
+> 一个功能丰富、开箱即用的 Go 语言工具库集合，让开发更高效、代码更优雅
 
-## 功能模块
+[![Go Version](https://img.shields.io/badge/Go-1.25+-00ADD8?style=flat-square&logo=go)](https://golang.org)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/zzhuang94/go-kit?style=flat-square)](https://goreportcard.com/report/github.com/zzhuang94/go-kit)
 
-### 文件操作 (file)
-- 文件读写、复制、移动、删除
-- 目录操作（创建、删除、列表、复制）
-- 文件压缩解压（tar、tar.gz）
-- MD5 哈希计算
+**go-kit** 是一个精心设计的 Go 语言工具库集合，旨在为开发者提供常用功能的简洁实现。无论是文件操作、字符串处理、数据结构，还是时间处理、加密解密，这里都有你需要的工具函数。所有函数都经过精心设计，支持泛型，提供完整的错误处理，并附带详细的中英文文档。
 
-### 字符串处理 (str)
-- 字符串基础操作（截取、替换、反转等）
-- 命名格式转换（驼峰、蛇形、短横线等）
-- 字符串验证（邮箱、URL、IP、手机号等）
+## ✨ 特性
 
-### 切片操作 (slice)
-- 切片基础操作（去重、反转、分块等）
-- 过滤和查找
-- 映射和归约转换
+- 🎯 **开箱即用** - 无需复杂配置，导入即用
+- 🔧 **功能丰富** - 涵盖文件、字符串、数据结构、时间、加密等 11+ 个模块
+- 🚀 **高性能** - 基于 Go 标准库，性能优异
+- 📚 **文档完善** - 每个函数都有中英文注释和详细文档
+- 🧪 **测试完备** - 完整的单元测试覆盖
+- 🔒 **类型安全** - 充分利用 Go 泛型，保证类型安全
+- 🌍 **国际化** - 提供中英文双语文档
 
-### 数据结构 (structs)
-- 栈（Stack）
-- 队列（Queue）
-- 集合（Set）
-- LRU 缓存
+## 📦 功能模块
 
-### 时间处理 (time)
-- 时间格式化
-- 时间解析
-- 时间计算（加减、差值、判断等）
+### 📁 文件操作 (file)
+强大的文件和目录操作工具，支持文件读写、复制、移动、删除，目录创建、遍历、复制，以及 tar/tar.gz 压缩解压和 MD5 哈希计算。
 
-### 加密工具 (crypto)
-- SHA 系列哈希（SHA1、SHA256、SHA512）
-- AES 加密解密
-- Base64 编码解码
+### 🔤 字符串处理 (str)
+丰富的字符串操作函数，包括基础操作（截取、替换、反转等）、命名格式转换（驼峰、蛇形、短横线等）和常用验证（邮箱、URL、IP、手机号等）。
 
-### 类型转换 (convert)
-- 字符串与数字互转
-- 字符串与布尔值互转
-- 字节数组与字符串互转
+### 📊 切片操作 (slice)
+强大的切片操作工具，支持去重、反转、分块、过滤、查找、映射、归约等函数式编程操作，充分利用 Go 泛型特性。
 
-### JSON 操作 (json)
-- JSON 序列化和反序列化
-- JSON 美化打印
-- JSON 字段操作（获取、设置、合并）
+### 🏗️ 数据结构 (structs)
+常用数据结构的泛型实现，包括栈（Stack）、队列（Queue）、集合（Set）和 LRU 缓存，性能优异，API 简洁。
 
-### 随机数生成 (rand)
-- 随机整数、浮点数
-- 随机字符串生成
-- 随机选择元素
+### ⏰ 时间处理 (time)
+便捷的时间操作工具，支持格式化、解析、计算（加减、差值、判断等），让时间处理变得简单直观。
 
-### 数据库操作 (db)
-- MySQL 连接（GORM、XORM）
-- Redis 连接
+### 🔐 加密工具 (crypto)
+完整的加密工具集，包括 SHA 系列哈希（SHA1、SHA256、SHA512）、AES 加密解密和 Base64 编码解码。
 
-### 网络操作 (net)
-- HTTP 请求（GET、POST）
-- IP 地址处理
+### 🔄 类型转换 (convert)
+简洁的类型转换工具，支持字符串与数字、布尔值、字节数组之间的相互转换。
 
-## 安装
+### 📄 JSON 操作 (json)
+便捷的 JSON 处理工具，支持序列化、反序列化、美化打印和字段操作（获取、设置、合并）。
+
+### 🎲 随机数生成 (rand)
+灵活的随机数生成工具，支持随机整数、浮点数、字符串生成和随机选择元素。
+
+### 💾 数据库操作 (db)
+数据库连接工具，支持 MySQL（GORM、XORM）和 Redis（单机、集群）连接。
+
+### 🌐 网络操作 (net)
+HTTP 请求工具和 IP 地址处理，简化网络编程。
+
+## 🚀 快速开始
+
+### 安装
 
 ```bash
 go get github.com/zzhuang94/go-kit
 ```
 
-## 快速开始
+### 使用示例
 
 ```go
 package main
@@ -75,6 +71,7 @@ import (
 	"github.com/zzhuang94/go-kit/file"
 	"github.com/zzhuang94/go-kit/str"
 	"github.com/zzhuang94/go-kit/slice"
+	"github.com/zzhuang94/go-kit/time"
 )
 
 func main() {
@@ -84,19 +81,57 @@ func main() {
 	fmt.Println(content)
 	
 	// 字符串处理
-	fmt.Println(str.CamelCase("hello_world")) // "helloWorld"
+	fmt.Println(str.CamelCase("hello_world"))  // "helloWorld"
+	fmt.Println(str.IsEmail("test@example.com")) // true
 	
 	// 切片操作
 	numbers := []int{1, 2, 3, 2, 4}
 	unique := slice.Unique(numbers)
 	fmt.Println(unique) // [1, 2, 3, 4]
+	
+	// 时间处理
+	now := time.Now()
+	fmt.Println(time.FormatDateTime(now)) // "2024-01-15 10:30:45"
 }
 ```
 
-## 文档
+## 📚 文档
 
-每个模块都有详细的文档，请查看各子目录下的 README.md 文件。
+每个模块都有详细的文档和使用示例，请查看各子目录下的 README.md 文件：
 
-## 许可证
+- [文件操作 (file)](./file/README.md)
+- [字符串处理 (str)](./str/README.md)
+- [切片操作 (slice)](./slice/README.md)
+- [数据结构 (structs)](./structs/README.md)
+- [时间处理 (time)](./time/README.md)
+- [加密工具 (crypto)](./crypto/README.md)
+- [类型转换 (convert)](./convert/README.md)
+- [JSON 操作 (json)](./json/README.md)
+- [随机数生成 (rand)](./rand/README.md)
+- [数据库操作 (db)](./db/README.md)
+- [网络操作 (net)](./net/README.md)
 
-MIT License
+## 🧪 运行测试
+
+```bash
+# 运行所有测试
+make test
+
+# 或使用 Go 命令
+go test ./...
+
+# 运行测试并显示覆盖率
+go test ./... -cover
+```
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📄 许可证
+
+本项目采用 [MIT License](LICENSE) 许可证。
+
+---
+
+⭐ 如果这个项目对你有帮助，请给它一个 Star！
