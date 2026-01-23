@@ -47,6 +47,227 @@
 ### 🌐 网络操作 (net)
 HTTP 请求工具和 IP 地址处理，简化网络编程。
 
+## 📋 函数列表
+
+### 📁 文件操作 (file)
+- `file.Exists(path)` - 检查文件或目录是否存在
+- `file.ReadAll(path)` - 读取整个文件内容，返回字节数组
+- `file.ReadString(path)` - 读取整个文件内容，返回字符串
+- `file.ReadLines(path)` - 读取文件的所有行，返回字符串切片
+- `file.Write(path, data)` - 写入字节数组到文件（覆盖模式）
+- `file.WriteString(path, content)` - 写入字符串到文件（覆盖模式）
+- `file.WriteLines(path, lines)` - 写入多行字符串到文件（覆盖模式）
+- `file.Append(path, data)` - 追加字节数组到文件末尾
+- `file.AppendString(path, content)` - 追加字符串到文件末尾
+- `file.AppendLines(path, lines)` - 追加多行字符串到文件末尾
+- `file.Copy(src, dst)` - 复制文件到目标位置
+- `file.Move(src, dst)` - 移动/重命名文件
+- `file.Remove(path)` - 删除文件
+- `file.Create(path)` - 创建空文件
+- `file.Touch(path)` - 更新文件访问和修改时间为当前时间
+- `file.GetSize(path)` - 获取文件大小（字节）
+- `file.GetModTime(path)` - 获取文件修改时间
+- `file.IsReadable(path)` - 检查文件是否可读
+- `file.IsWritable(path)` - 检查文件是否可写
+- `file.IsDir(path)` - 判断指定路径是否为目录
+- `file.EnsureDir(dir)` - 确保目录存在，如果不存在则创建（包括所有父目录）
+- `file.RemoveDir(dir)` - 删除目录及其所有内容（递归删除）
+- `file.CleanDir(dir)` - 清空目录内容但保留目录本身
+- `file.MoveDir(src, dst)` - 移动/重命名目录
+- `file.ListDir(dir)` - 列出目录下的所有文件和子目录名称
+- `file.ListFiles(dir)` - 列出目录下的所有文件名称（不包括子目录）
+- `file.ListDirs(dir)` - 列出目录下的所有子目录名称（不包括文件）
+- `file.CopyDir(src, dst)` - 复制目录及其所有内容到目标位置
+- `file.GetDirSize(dir)` - 获取目录的总大小（字节），递归计算所有文件
+- `file.GetDirModTime(dir)` - 获取目录修改时间
+- `file.IsDirEmpty(dir)` - 检查目录是否为空
+- `file.GetDirCount(dir)` - 获取目录下的文件和子目录数量
+- `file.WalkDir(root, walkFn)` - 遍历目录，对每个文件或目录执行指定的函数
+- `file.Md5(path)` - 计算文件的 MD5 值
+- `file.TarDir(srcDir, dstFile)` - 将目录打包为 tar 文件
+- `file.TarGzDir(srcDir, dstFile)` - 将目录打包为 tar.gz 压缩文件
+- `file.Untar(srcFile, dstDir)` - 解压 tar 文件到指定目录
+- `file.UntarGz(srcFile, dstDir)` - 解压 tar.gz 压缩文件到指定目录
+
+### 🔤 字符串处理 (str)
+- `str.Trim(s)` - 去除首尾空白字符
+- `str.Md5(params)` - 计算参数的 MD5 值
+- `str.Uuid()` - 生成 UUID
+- `str.Sub(s, start, end)` - 截取子串，支持负数索引
+- `str.Reverse(s)` - 反转字符串
+- `str.PadLeft(s, length, pad)` - 左填充字符串到指定长度
+- `str.PadRight(s, length, pad)` - 右填充字符串到指定长度
+- `str.Truncate(s, length)` - 截断字符串到指定长度
+- `str.SplitLines(str)` - 按行分割字符串，去除空行和重复行
+- `str.ParseAndFormatJson(str)` - 解析并格式化 JSON 字符串
+- `str.CamelCase(s)` - 转换为驼峰命名
+- `str.SnakeCase(s)` - 转换为蛇形命名
+- `str.KebabCase(s)` - 转换为短横线命名
+- `str.TitleCase(s)` - 转换为标题格式（每个单词首字母大写）
+- `str.Pluralize(s)` - 简单的复数化（基础规则）
+- `str.IsEmail(s)` - 验证邮箱格式
+- `str.IsURL(s)` - 验证URL格式
+- `str.IsIP(s)` - 验证IP地址格式（IPv4）
+- `str.IsPhone(s)` - 验证手机号格式（中国大陆）
+- `str.IsNumeric(s)` - 验证是否为数字字符串
+- `str.IsAlpha(s)` - 验证是否为字母字符串
+- `str.IsAlphaNumeric(s)` - 验证是否为字母数字字符串
+- `str.IsEmpty(s)` - 检查字符串是否为空
+- `str.IsBlank(s)` - 检查字符串是否为空白（空或只包含空白字符）
+
+### 📊 切片操作 (slice)
+- `slice.Contains(slice, item)` - 检查切片是否包含指定元素
+- `slice.IndexOf(slice, item)` - 查找元素在切片中的索引，不存在返回 -1
+- `slice.LastIndexOf(slice, item)` - 从后往前查找元素在切片中的索引，不存在返回 -1
+- `slice.Unique(slice)` - 去除重复元素
+- `slice.Reverse(slice)` - 反转切片
+- `slice.Shuffle(slice)` - 随机打乱切片
+- `slice.Chunk(slice, size)` - 将切片分块
+- `slice.Flatten(slices)` - 扁平化嵌套切片
+- `slice.Intersect(slice1, slice2)` - 求两个切片的交集
+- `slice.Union(slice1, slice2)` - 求两个切片的并集
+- `slice.Diff(slice1, slice2)` - 求两个切片的差集（slice1 中有但 slice2 中没有的元素）
+- `slice.Remove(slice, item)` - 删除切片中所有匹配的元素
+- `slice.RemoveAt(slice, index)` - 删除指定索引的元素
+- `slice.Insert(slice, index, item)` - 在指定索引插入元素
+- `slice.First(slice)` - 获取第一个元素，如果切片为空返回零值
+- `slice.Last(slice)` - 获取最后一个元素，如果切片为空返回零值
+- `slice.Take(slice, n)` - 取前N个元素
+- `slice.Drop(slice, n)` - 跳过前N个元素
+- `slice.Filter(slice, fn)` - 过滤切片，保留满足条件的元素
+- `slice.Find(slice, fn)` - 查找第一个满足条件的元素，不存在返回零值
+- `slice.FindIndex(slice, fn)` - 查找第一个满足条件的元素索引，不存在返回 -1
+- `slice.FindLast(slice, fn)` - 从后往前查找第一个满足条件的元素，不存在返回零值
+- `slice.FindLastIndex(slice, fn)` - 从后往前查找第一个满足条件的元素索引，不存在返回 -1
+- `slice.Every(slice, fn)` - 检查是否所有元素都满足条件
+- `slice.Some(slice, fn)` - 检查是否至少有一个元素满足条件
+- `slice.Count(slice, fn)` - 统计满足条件的元素个数
+- `slice.GroupBy(slice, fn)` - 按指定函数分组
+- `slice.Map(slice, fn)` - 映射转换切片
+- `slice.Reduce(slice, initial, fn)` - 归约切片
+- `slice.FlatMap(slice, fn)` - 扁平映射
+- `slice.Partition(slice, fn)` - 将切片分为两部分：满足条件的和不满足条件的
+
+### 🔢 算法与数据结构 (algo)
+- `algo.NewStack[T]()` - 创建新栈
+- `stack.Push(item)` - 入栈
+- `stack.Pop()` - 出栈
+- `stack.Peek()` - 查看栈顶元素
+- `stack.Size()` - 返回栈大小
+- `stack.IsEmpty()` - 检查栈是否为空
+- `stack.Clear()` - 清空栈
+- `algo.NewQueue[T]()` - 创建新队列
+- `queue.Enqueue(item)` - 入队
+- `queue.Dequeue()` - 出队
+- `queue.Peek()` - 查看队首元素
+- `queue.Size()` - 返回队列大小
+- `queue.IsEmpty()` - 检查队列是否为空
+- `queue.Clear()` - 清空队列
+- `algo.NewSet[T]()` - 创建新集合
+- `set.Add(item)` - 添加元素
+- `set.Remove(item)` - 删除元素
+- `set.Contains(item)` - 检查是否包含元素
+- `set.Size()` - 返回集合大小
+- `set.IsEmpty()` - 检查集合是否为空
+- `set.Clear()` - 清空集合
+- `set.ToSlice()` - 转换为切片
+- `set.Union(other)` - 求并集
+- `set.Intersect(other)` - 求交集
+- `set.Diff(other)` - 求差集（s 中有但 other 中没有的元素）
+- `algo.NewLRU[K, V](capacity)` - 创建LRU缓存
+- `lru.Get(key)` - 获取值
+- `lru.Set(key, value)` - 设置值
+- `lru.Remove(key)` - 删除键值对
+- `lru.Clear()` - 清空缓存
+- `lru.Size()` - 返回当前大小
+- `lru.Cap()` - 返回容量
+- `algo.Sort(slice)` - 对切片进行排序（使用快速排序）
+- `algo.SortFunc(slice, less)` - 使用自定义比较函数对切片进行排序
+- `algo.SortDesc(slice)` - 对切片进行降序排序
+- `algo.IsSorted(slice)` - 检查切片是否已排序
+- `algo.IsSortedFunc(slice, less)` - 使用自定义比较函数检查切片是否已排序
+- `algo.BinarySearch(slice, target)` - 二分查找，返回目标值的索引，如果不存在返回 -1
+- `algo.BinarySearchFunc(slice, target, cmp)` - 使用自定义比较函数进行二分查找
+- `algo.LinearSearch(slice, target)` - 线性查找，返回目标值的索引，如果不存在返回 -1
+- `algo.FindFirst(slice, fn)` - 查找第一个满足条件的元素索引，不存在返回 -1
+- `algo.FindLast(slice, fn)` - 查找最后一个满足条件的元素索引，不存在返回 -1
+- `algo.LowerBound(slice, target)` - 查找第一个大于等于目标值的元素索引
+- `algo.UpperBound(slice, target)` - 查找第一个大于目标值的元素索引
+
+### ⏰ 时间处理 (time)
+- `time.Format(t, layout)` - 格式化时间为字符串
+- `time.FormatDate(t)` - 格式化日期（YYYY-MM-DD）
+- `time.FormatTime(t)` - 格式化时间（HH:mm:ss）
+- `time.FormatDateTime(t)` - 格式化日期时间（YYYY-MM-DD HH:mm:ss）
+- `time.FormatTimestamp(t)` - 格式化时间戳
+- `time.Parse(layout, value)` - 解析时间字符串
+- `time.ParseDate(value)` - 解析日期字符串（YYYY-MM-DD）
+- `time.ParseTime(value)` - 解析时间字符串（HH:mm:ss）
+- `time.ParseDateTime(value)` - 解析日期时间字符串（YYYY-MM-DD HH:mm:ss）
+- `time.AddDays(t, days)` - 添加天数
+- `time.AddHours(t, hours)` - 添加小时
+- `time.AddMinutes(t, minutes)` - 添加分钟
+- `time.DiffDays(t1, t2)` - 计算天数差
+- `time.DiffHours(t1, t2)` - 计算小时差
+- `time.DiffMinutes(t1, t2)` - 计算分钟差
+- `time.IsToday(t)` - 判断是否为今天
+- `time.IsYesterday(t)` - 判断是否为昨天
+- `time.IsTomorrow(t)` - 判断是否为明天
+- `time.StartOfDay(t)` - 获取一天的开始时间
+- `time.EndOfDay(t)` - 获取一天的结束时间
+- `time.StartOfWeek(t)` - 获取一周的开始时间（周一）
+- `time.StartOfMonth(t)` - 获取一月的开始时间
+- `time.StartOfYear(t)` - 获取一年的开始时间
+
+### 🔐 加密工具 (crypto)
+- `crypto.SHA1(data)` - 计算字节数组的 SHA1 值
+- `crypto.SHA256(data)` - 计算字节数组的 SHA256 值
+- `crypto.SHA512(data)` - 计算字节数组的 SHA512 值
+- `crypto.SHA1String(s)` - 计算字符串的 SHA1 值
+- `crypto.SHA256String(s)` - 计算字符串的 SHA256 值
+- `crypto.SHA512String(s)` - 计算字符串的 SHA512 值
+- `crypto.SHA1File(path)` - 计算文件的 SHA1 值
+- `crypto.SHA256File(path)` - 计算文件的 SHA256 值
+- `crypto.SHA512File(path)` - 计算文件的 SHA512 值
+- `crypto.AESEncrypt(key, plaintext)` - AES加密
+- `crypto.AESDecrypt(key, ciphertext)` - AES解密
+- `crypto.AESEncryptString(key, plaintext)` - AES加密（字符串）
+- `crypto.AESDecryptString(key, ciphertext)` - AES解密（字符串）
+- `crypto.Base64Encode(data)` - Base64编码
+- `crypto.Base64Decode(data)` - Base64解码
+- `crypto.Base64EncodeString(s)` - Base64编码（字符串）
+- `crypto.Base64DecodeString(s)` - Base64解码（字符串）
+
+### 🛠️ 通用工具库 (lib)
+- `lib.Choice(slice)` - 从切片中随机选择一个元素
+- `lib.Shuffle(slice)` - 随机打乱切片
+- `lib.RunCmd(cmd, timeout...)` - 执行 Shell 命令，支持超时设置
+- `logCfg.InitLogrus()` - 初始化全局 logrus 日志
+- `logCfg.BuildLogger()` - 创建新的 logrus Logger 实例
+- `lib.GetFormatter()` - 获取自定义日志格式化器
+- `lib.TryLock(c, key, timeout)` - 尝试获取分布式锁
+- `lock.Release()` - 释放锁
+- `lib.TryCheckIn(c, key, limit, timeout)` - 尝试进入限流器
+- `limiter.Release()` - 释放限流器资源
+- `lib.NewElection(key, val, cmdable)` - 创建选举实例
+- `election.IsMaster()` - 检查当前实例是否为主节点
+- `election.GetMaster()` - 获取当前主节点的值
+- `election.Release()` - 释放主节点身份
+- `election.Stop()` - 停止选举并释放资源
+
+### 💾 数据库操作 (db)
+- `mysqlCfg.ConnGorm()` - 使用 GORM 连接 MySQL
+- `mysqlCfg.ConnXorm()` - 使用 XORM 连接 MySQL
+- `db.ConnRedis(cfg)` - 连接单机 Redis
+- `db.ConnRedisCluster(cfg)` - 连接 Redis 集群
+
+### 🌐 网络操作 (net)
+- `net.Post(url, data, headers, timeoutSecond)` - 发送 POST 请求
+- `net.Get(url, timeoutSecond)` - 发送 GET 请求
+- `net.GetWithHeaders(url, timeoutSecond, headers)` - 发送带请求头的 GET 请求
+- `net.ClientIp(req)` - 获取客户端 IP 地址
+- `net.LocalIp()` - 获取本机 IP 地址
+
 ## 🚀 快速开始
 
 ### 安装
