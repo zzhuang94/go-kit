@@ -29,8 +29,8 @@
 ### 📊 切片操作 (slice)
 强大的切片操作工具，支持去重、反转、分块、过滤、查找、映射、归约等函数式编程操作，充分利用 Go 泛型特性。
 
-### 🏗️ 数据结构 (structs)
-常用数据结构的泛型实现，包括栈（Stack）、队列（Queue）、集合（Set）和 LRU 缓存，性能优异，API 简洁。
+### 🔢 算法与数据结构 (algo)
+常用数据结构和算法的泛型实现，包括栈（Stack）、队列（Queue）、集合（Set）、LRU 缓存，以及排序算法（快速排序）和搜索算法（二分查找、线性查找等），性能优异，API 简洁。
 
 ### ⏰ 时间处理 (time)
 便捷的时间操作工具，支持格式化、解析、计算（加减、差值、判断等），让时间处理变得简单直观。
@@ -102,7 +102,7 @@ func main() {
 - [文件操作 (file)](./file/README.md)
 - [字符串处理 (str)](./str/README.md)
 - [切片操作 (slice)](./slice/README.md)
-- [数据结构 (structs)](./structs/README.md)
+- [算法与数据结构 (algo)](./algo/README.md)
 - [时间处理 (time)](./time/README.md)
 - [加密工具 (crypto)](./crypto/README.md)
 - [类型转换 (convert)](./convert/README.md)

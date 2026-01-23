@@ -1,4 +1,4 @@
-package structs
+package algo
 
 // Queue 队列数据结构 / Queue data structure
 type Queue[T any] struct {

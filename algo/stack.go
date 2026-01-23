@@ -1,4 +1,4 @@
-package structs
+package algo
 
 // Stack 栈数据结构 / Stack data structure
 type Stack[T any] struct {

@@ -1,4 +1,4 @@
-package structs
+package algo
 
 import (
 	"testing"
@@ -87,5 +87,43 @@ func BenchmarkSetContains_String(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		set.Contains(testItem)
+	}
+}
+
+// Benchmark Sort
+func BenchmarkSort(b *testing.B) {
+	slice := make([]int, 1000)
+	for i := range slice {
+		slice[i] = 1000 - i
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		testSlice := make([]int, len(slice))
+		copy(testSlice, slice)
+		Sort(testSlice)
+	}
+}
+
+// Benchmark BinarySearch
+func BenchmarkBinarySearch(b *testing.B) {
+	slice := make([]int, 1000)
+	for i := range slice {
+		slice[i] = i
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		BinarySearch(slice, 500)
+	}
+}
+
+// Benchmark LinearSearch
+func BenchmarkLinearSearch(b *testing.B) {
+	slice := make([]int, 1000)
+	for i := range slice {
+		slice[i] = i
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		LinearSearch(slice, 500)
 	}
 }

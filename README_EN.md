@@ -29,8 +29,8 @@ Rich string manipulation functions including basic operations (substring, replac
 ### 📊 Slice Operations (slice)
 Powerful slice operation utilities supporting deduplication, reversal, chunking, filtering, finding, mapping, reduction, and other functional programming operations, fully leveraging Go generics.
 
-### 🏗️ Data Structures (structs)
-Generic implementations of common data structures including Stack, Queue, Set, and LRU Cache with excellent performance and clean APIs.
+### 🔢 Algorithms & Data Structures (algo)
+Generic implementations of common data structures and algorithms including Stack, Queue, Set, LRU Cache, sorting algorithms (quicksort), and search algorithms (binary search, linear search, etc.) with excellent performance and clean APIs.
 
 ### ⏰ Time Handling (time)
 Convenient time operation utilities supporting formatting, parsing, calculations (add, subtract, diff, etc.), making time handling simple and intuitive.
@@ -102,7 +102,7 @@ Each module has detailed documentation and usage examples. Please refer to the R
 - [File Operations (file)](./file/README_EN.md)
 - [String Processing (str)](./str/README_EN.md)
 - [Slice Operations (slice)](./slice/README_EN.md)
-- [Data Structures (structs)](./structs/README_EN.md)
+- [Algorithms & Data Structures (algo)](./algo/README_EN.md)
 - [Time Handling (time)](./time/README_EN.md)
 - [Crypto Tools (crypto)](./crypto/README_EN.md)
 - [Type Conversion (convert)](./convert/README_EN.md)

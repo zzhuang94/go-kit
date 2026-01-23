@@ -1,4 +1,4 @@
-package structs
+package algo
 
 // Set 集合数据结构 / Set data structure
 type Set[T comparable] struct {
