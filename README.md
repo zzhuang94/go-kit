@@ -114,14 +114,26 @@ func main() {
 ## 🧪 运行测试
 
 ```bash
-# 运行所有测试
+# 运行所有测试（包括单元测试和基准测试）
 make test
+
+# 或使用一键测试脚本
+# Windows
+test.bat
+
+# Unix/Linux/Mac
+./test.sh
 
 # 或使用 Go 命令
 go test ./...
 
 # 运行测试并显示覆盖率
 go test ./... -cover
+
+# 只运行基准测试
+make test-bench
+# 或
+go test ./... -bench=. -benchmem
 ```
 
 ## 🤝 贡献

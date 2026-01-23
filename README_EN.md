@@ -114,14 +114,26 @@ Each module has detailed documentation and usage examples. Please refer to the R
 ## 🧪 Running Tests
 
 ```bash
-# Run all tests
+# Run all tests (including unit tests and benchmarks)
 make test
+
+# Or use one-click test scripts
+# Windows
+test.bat
+
+# Unix/Linux/Mac
+./test.sh
 
 # Or use Go command
 go test ./...
 
 # Run tests with coverage
 go test ./... -cover
+
+# Run benchmarks only
+make test-bench
+# Or
+go test ./... -bench=. -benchmem
 ```
 
 ## 🤝 Contributing

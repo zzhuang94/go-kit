@@ -25,6 +25,11 @@ test-coverage-html:
 	@go tool cover -html=coverage.out -o coverage.html
 	@echo "✅ Coverage report generated: coverage.html"
 
+# 运行所有基准测试
+test-bench:
+	@echo "📊 Running all benchmark tests..."
+	@go test ./... -bench=. -benchmem
+
 # 清理生成的文件
 clean:
 	@echo "🧹 Cleaning up..."
@@ -40,6 +45,7 @@ help:
 	@echo "  make test-verbose      - Run all tests with verbose output"
 	@echo "  make test-coverage     - Run all tests with coverage"
 	@echo "  make test-coverage-html - Run tests and generate HTML coverage report"
+	@echo "  make test-bench        - Run all benchmark tests"
 	@echo "  make clean             - Clean generated files"
 	@echo "  make help              - Show this help message"
 	@echo ""
