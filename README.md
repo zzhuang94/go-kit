@@ -272,9 +272,23 @@ HTTP 请求工具和 IP 地址处理，简化网络编程。
 
 ### 安装
 
+安装最新版本：
 ```bash
-go get github.com/zzhuang94/go-kit
+go get github.com/zzhuang94/go-kit@latest
 ```
+
+安装指定版本（推荐）：
+```bash
+go get github.com/zzhuang94/go-kit@v1.0.0
+```
+
+如果遇到版本问题，可以在项目的 `go.mod` 文件中直接指定版本：
+```go
+require (
+    github.com/zzhuang94/go-kit v1.0.0
+)
+```
+然后运行 `go mod tidy`。
 
 ### 使用示例
 

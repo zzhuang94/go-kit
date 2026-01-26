@@ -272,9 +272,23 @@ HTTP request utilities and IP address handling, simplifying network programming.
 
 ### Installation
 
+Install the latest version:
 ```bash
-go get github.com/zzhuang94/go-kit
+go get github.com/zzhuang94/go-kit@latest
 ```
+
+Install a specific version (recommended):
+```bash
+go get github.com/zzhuang94/go-kit@v1.0.0
+```
+
+If you encounter version issues, you can directly specify the version in your project's `go.mod` file:
+```go
+require (
+    github.com/zzhuang94/go-kit v1.0.0
+)
+```
+Then run `go mod tidy`.
 
 ### Usage Example
 
