@@ -33,7 +33,7 @@ type RedisCfg struct {
 	Passwd string `json:"passwd"` // Redis password
 }
 
-func ConnRedis(c *RedisCfg) redis.Cmdable // Connect standalone Redis
+func (c *RedisCfg) ConnRedis() redis.Cmdable // Connect standalone Redis
 ```
 
 ### Redis Cluster
@@ -44,7 +44,19 @@ type RedisClusterCfg struct {
 	Passwd string   `json:"passwd"`  // Redis password
 }
 
-func ConnRedisCluster(c *RedisClusterCfg) redis.Cmdable // Connect Redis cluster
+func (c *RedisClusterCfg) ConnRedisCluster() redis.Cmdable // Connect Redis cluster
+```
+
+## etcd Connection
+
+```go
+type EtcdCfg struct {
+	Endpoints   []string      `json:"endpoints"`    // etcd endpoint addresses
+	Username    string        `json:"username"`     // Username (optional)
+	Password    string        `json:"password"`     // Password (optional)seconds
+}
+
+func (c *EtcdCfg) ConnEtcd() (*clientv3.Client, error) // Connect to etcd, automatically tests the connection
 ```
 
 ## Usage Examples
@@ -117,12 +129,80 @@ func main() {
 		Passwd: "password",
 	}
 	
-	client := db.ConnRedis(cfg)
+	client := cfg.ConnRedis()
 	if client == nil {
 		panic("Failed to connect to Redis")
 	}
 	
 	// Use client...
 	client.Set(context.Background(), "key", "value", 0)
+}
+```
+
+### Redis Cluster
+
+```go
+package main
+
+import (
+	"github.com/zzhuang94/go-kit/db"
+	"context"
+)
+
+func main() {
+	cfg := &db.RedisClusterCfg{
+		Addrs:  []string{"localhost:7000", "localhost:7001", "localhost:7002"},
+		Passwd: "password",
+	}
+	
+	client := cfg.ConnRedisCluster()
+	if client == nil {
+		panic("Failed to connect to Redis cluster")
+	}
+	
+	// Use client...
+	client.Set(context.Background(), "key", "value", 0)
+}
+```
+
+### etcd
+
+```go
+package main
+
+import (
+	"context"
+	"github.com/zzhuang94/go-kit/db"
+	"time"
+	clientv3 "go.etcd.io/etcd/client/v3"
+)
+
+func main() {
+	cfg := &db.EtcdCfg{
+		Endpoints:   []string{"localhost:2379"},
+		Username:    "",                    // Optional, if etcd has authentication enabled
+		Password:    "",                    // Optional, if etcd has authentication enabled
+	}
+	
+	client, err := cfg.ConnEtcd()
+	if err != nil {
+		panic(err)
+	}
+	defer client.Close()
+	
+	// Use client for etcd operations
+	// For example: using clientv3 API
+	ctx := context.Background()
+	_, err = client.Put(ctx, "key", "value")
+	if err != nil {
+		panic(err)
+	}
+	
+	resp, err := client.Get(ctx, "key")
+	if err != nil {
+		panic(err)
+	}
+	
+	// Use resp...
 }
 ```

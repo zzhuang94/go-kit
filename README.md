@@ -42,7 +42,7 @@
 实用的通用工具集合，包括随机数操作（随机选择、打乱）、Shell 命令执行、日志管理（基于 logrus，支持日志轮转）、分布式锁（基于 Redis）、限流器（支持 Redis 和本地模式）和分布式选举（基于 Redis）。
 
 ### 💾 数据库操作 (db)
-数据库连接工具，支持 MySQL（GORM、XORM）和 Redis（单机、集群）连接。
+数据库连接工具，支持 MySQL（GORM、XORM）、Redis（单机、集群）和 etcd 连接。
 
 ### 🌐 网络操作 (net)
 强大的 HTTP 请求工具和 IP 地址处理，支持 GET、POST、PUT、DELETE、PATCH 等请求方法，JSON 自动序列化/反序列化，文件上传下载，以及完整的响应信息获取。
@@ -258,8 +258,9 @@
 ### 💾 数据库操作 (db)
 - `mysqlCfg.ConnGorm()` - 使用 GORM 连接 MySQL
 - `mysqlCfg.ConnXorm()` - 使用 XORM 连接 MySQL
-- `db.ConnRedis(cfg)` - 连接单机 Redis
-- `db.ConnRedisCluster(cfg)` - 连接 Redis 集群
+- `redisCfg.ConnRedis()` - 连接单机 Redis
+- `redisClusterCfg.ConnRedisCluster()` - 连接 Redis 集群
+- `etcdCfg.ConnEtcd()` - 连接 etcd
 
 ### 🌐 网络操作 (net)
 - `net.Get(url, timeout)` - 发送 GET 请求

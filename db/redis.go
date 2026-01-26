@@ -18,7 +18,7 @@ type RedisClusterCfg struct {
 }
 
 // ConnRedis 连接单机 Redis / Connect standalone Redis
-func ConnRedis(c *RedisCfg) redis.Cmdable {
+func (c *RedisCfg) ConnRedis() redis.Cmdable {
 	ret := redis.NewClient(&redis.Options{
 		Addr:     c.Addr,
 		Password: c.Passwd,
@@ -31,7 +31,7 @@ func ConnRedis(c *RedisCfg) redis.Cmdable {
 }
 
 // ConnRedisCluster 连接 Redis 集群 / Connect Redis cluster
-func ConnRedisCluster(c *RedisClusterCfg) redis.Cmdable {
+func (c *RedisClusterCfg) ConnRedisCluster() redis.Cmdable {
 	ret := redis.NewClusterClient(&redis.ClusterOptions{
 		Addrs:    c.Addrs,
 		Password: c.Passwd,

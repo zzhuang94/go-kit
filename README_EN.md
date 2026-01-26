@@ -42,7 +42,7 @@ Complete encryption toolkit including SHA series hashing (SHA1, SHA256, SHA512),
 Practical general utility collection including random operations (random selection, shuffle), Shell command execution, log management (based on logrus with log rotation), distributed locks (Redis-based), rate limiter (supports Redis and local mode), and distributed election (Redis-based).
 
 ### 💾 Database Operations (db)
-Database connection utilities supporting MySQL (GORM, XORM) and Redis (standalone, cluster) connections.
+Database connection utilities supporting MySQL (GORM, XORM), Redis (standalone, cluster), and etcd connections.
 
 ### 🌐 Network Operations (net)
 Powerful HTTP request utilities and IP address handling, supporting GET, POST, PUT, DELETE, PATCH request methods, automatic JSON serialization/deserialization, file upload/download, and complete response information retrieval.
@@ -258,8 +258,9 @@ Powerful HTTP request utilities and IP address handling, supporting GET, POST, P
 ### 💾 Database Operations (db)
 - `mysqlCfg.ConnGorm()` - Connect MySQL using GORM
 - `mysqlCfg.ConnXorm()` - Connect MySQL using XORM
-- `db.ConnRedis(cfg)` - Connect standalone Redis
-- `db.ConnRedisCluster(cfg)` - Connect Redis cluster
+- `redisCfg.ConnRedis()` - Connect standalone Redis
+- `redisClusterCfg.ConnRedisCluster()` - Connect Redis cluster
+- `etcdCfg.ConnEtcd()` - Connect to etcd
 
 ### 🌐 Network Operations (net)
 - `net.Get(url, timeout)` - Send GET request
