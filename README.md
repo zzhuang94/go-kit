@@ -45,7 +45,7 @@
 数据库连接工具，支持 MySQL（GORM、XORM）和 Redis（单机、集群）连接。
 
 ### 🌐 网络操作 (net)
-HTTP 请求工具和 IP 地址处理，简化网络编程。
+强大的 HTTP 请求工具和 IP 地址处理，支持 GET、POST、PUT、DELETE、PATCH 等请求方法，JSON 自动序列化/反序列化，文件上传下载，以及完整的响应信息获取。
 
 ## 📋 函数列表
 
@@ -262,9 +262,19 @@ HTTP 请求工具和 IP 地址处理，简化网络编程。
 - `db.ConnRedisCluster(cfg)` - 连接 Redis 集群
 
 ### 🌐 网络操作 (net)
-- `net.Post(url, data, headers, timeout)` - 发送 POST 请求
 - `net.Get(url, timeout)` - 发送 GET 请求
 - `net.GetWithHeaders(url, timeout, headers)` - 发送带请求头的 GET 请求
+- `net.Post(url, data, headers, timeout)` - 发送 POST 请求
+- `net.Put(url, data, headers, timeout)` - 发送 PUT 请求
+- `net.Delete(url, headers, timeout)` - 发送 DELETE 请求
+- `net.Patch(url, data, headers, timeout)` - 发送 PATCH 请求
+- `net.Req(method, url, data, headers, timeout)` - 发送通用 HTTP 请求
+- `net.ReqFull(method, url, data, headers, timeout)` - 发送请求并返回完整响应信息
+- `net.PostJson(url, data, headers, timeout)` - 发送 JSON POST 请求
+- `net.GetJsonParse(url, result, timeout)` - 发送 GET 请求并解析 JSON 响应
+- `net.PostJsonParse(url, data, result, headers, timeout)` - 发送 JSON POST 请求并解析 JSON 响应
+- `net.UploadFile(url, path, name, headers, timeout)` - 上传文件
+- `net.DownloadFile(url, path, timeout)` - 下载文件到本地
 - `net.ClientIp(req)` - 获取客户端 IP 地址
 - `net.LocalIp()` - 获取本机 IP 地址
 

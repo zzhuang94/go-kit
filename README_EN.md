@@ -45,7 +45,7 @@ Practical general utility collection including random operations (random selecti
 Database connection utilities supporting MySQL (GORM, XORM) and Redis (standalone, cluster) connections.
 
 ### 🌐 Network Operations (net)
-HTTP request utilities and IP address handling, simplifying network programming.
+Powerful HTTP request utilities and IP address handling, supporting GET, POST, PUT, DELETE, PATCH request methods, automatic JSON serialization/deserialization, file upload/download, and complete response information retrieval.
 
 ## 📋 Function List
 
@@ -262,9 +262,19 @@ HTTP request utilities and IP address handling, simplifying network programming.
 - `db.ConnRedisCluster(cfg)` - Connect Redis cluster
 
 ### 🌐 Network Operations (net)
-- `net.Post(url, data, headers, timeout)` - Send POST request
 - `net.Get(url, timeout)` - Send GET request
 - `net.GetWithHeaders(url, timeout, headers)` - Send GET request with headers
+- `net.Post(url, data, headers, timeout)` - Send POST request
+- `net.Put(url, data, headers, timeout)` - Send PUT request
+- `net.Delete(url, headers, timeout)` - Send DELETE request
+- `net.Patch(url, data, headers, timeout)` - Send PATCH request
+- `net.Req(method, url, data, headers, timeout)` - Send generic HTTP request
+- `net.ReqFull(method, url, data, headers, timeout)` - Send request and return full response information
+- `net.PostJson(url, data, headers, timeout)` - Send JSON POST request
+- `net.GetJsonParse(url, result, timeout)` - Send GET request and parse JSON response
+- `net.PostJsonParse(url, data, result, headers, timeout)` - Send JSON POST request and parse JSON response
+- `net.UploadFile(url, path, name, headers, timeout)` - Upload file
+- `net.DownloadFile(url, path, timeout)` - Download file to local
 - `net.ClientIp(req)` - Get client IP address
 - `net.LocalIp()` - Get local IP address
 
