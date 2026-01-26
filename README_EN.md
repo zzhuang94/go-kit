@@ -262,9 +262,9 @@ HTTP request utilities and IP address handling, simplifying network programming.
 - `db.ConnRedisCluster(cfg)` - Connect Redis cluster
 
 ### 🌐 Network Operations (net)
-- `net.Post(url, data, headers, timeoutSecond)` - Send POST request
-- `net.Get(url, timeoutSecond)` - Send GET request
-- `net.GetWithHeaders(url, timeoutSecond, headers)` - Send GET request with headers
+- `net.Post(url, data, headers, timeout)` - Send POST request
+- `net.Get(url, timeout)` - Send GET request
+- `net.GetWithHeaders(url, timeout, headers)` - Send GET request with headers
 - `net.ClientIp(req)` - Get client IP address
 - `net.LocalIp()` - Get local IP address
 

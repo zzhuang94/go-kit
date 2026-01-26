@@ -262,9 +262,9 @@ HTTP 请求工具和 IP 地址处理，简化网络编程。
 - `db.ConnRedisCluster(cfg)` - 连接 Redis 集群
 
 ### 🌐 网络操作 (net)
-- `net.Post(url, data, headers, timeoutSecond)` - 发送 POST 请求
-- `net.Get(url, timeoutSecond)` - 发送 GET 请求
-- `net.GetWithHeaders(url, timeoutSecond, headers)` - 发送带请求头的 GET 请求
+- `net.Post(url, data, headers, timeout)` - 发送 POST 请求
+- `net.Get(url, timeout)` - 发送 GET 请求
+- `net.GetWithHeaders(url, timeout, headers)` - 发送带请求头的 GET 请求
 - `net.ClientIp(req)` - 获取客户端 IP 地址
 - `net.LocalIp()` - 获取本机 IP 地址
 
