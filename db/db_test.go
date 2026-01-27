@@ -554,13 +554,16 @@ func TestEtcdConnection(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// 测试连接状态
-	status, err := client.Status(ctx, cfg.Endpoints[0])
+	// 通过一个简单的 GET 操作来测试连接（Status 需要管理员权限）
+	// 使用一个测试键来验证连接和权限
+	testKey := "/hzz/test_connection"
+	getResp, err := client.Get(ctx, testKey)
 	if err != nil {
-		t.Fatalf("Failed to get etcd status: %v", err)
+		t.Fatalf("Failed to test etcd connection: %v", err)
 	}
-	if status == nil {
-		t.Fatal("Status should not be nil")
+	// 即使键不存在，Get 操作成功也说明连接正常
+	if getResp == nil {
+		t.Fatal("Get response should not be nil")
 	}
 	t.Log("etcd connection test passed")
 }
@@ -575,7 +578,7 @@ func TestEtcdBasicOperations(t *testing.T) {
 	defer client.Close()
 
 	ctx := context.Background()
-	testKey := "go_kit_test/basic"
+	testKey := "/hzz/go_kit_test/basic"
 	testValue := "test_value_123"
 
 	// 清理测试数据
@@ -635,7 +638,7 @@ func TestEtcdLease(t *testing.T) {
 	defer client.Close()
 
 	ctx := context.Background()
-	testKey := "go_kit_test/lease"
+	testKey := "/hzz/go_kit_test/lease"
 	testValue := "lease_value"
 
 	// 清理测试数据
@@ -699,8 +702,8 @@ func TestEtcdTransaction(t *testing.T) {
 	defer client.Close()
 
 	ctx := context.Background()
-	testKey1 := "go_kit_test/txn1"
-	testKey2 := "go_kit_test/txn2"
+	testKey1 := "/hzz/go_kit_test/txn1"
+	testKey2 := "/hzz/go_kit_test/txn2"
 	testValue1 := "value1"
 	testValue2 := "value2"
 
