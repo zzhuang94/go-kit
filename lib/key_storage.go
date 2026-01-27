@@ -18,6 +18,51 @@ type KeyStor interface {
 	Ping(ctx context.Context) error
 }
 
+var (
+	localMutex sync.Mutex
+	localMap   map[string]int64
+)
+
+type KeyStorLocal struct {
+	key string
+}
+
+func NewKeyStorLocal(key string) KeyStor {
+	localMutex.Lock()
+	defer localMutex.Unlock()
+	if localMap == nil {
+		localMap = make(map[string]int64)
+	}
+	if _, ok := localMap[key]; !ok {
+		localMap[key] = 0
+	}
+	return &KeyStorLocal{key: key}
+}
+
+func (l *KeyStorLocal) Incr(ctx context.Context) (int64, error) {
+	localMutex.Lock()
+	defer localMutex.Unlock()
+	localMap[l.key]++
+	return localMap[l.key], nil
+}
+
+func (l *KeyStorLocal) Decr(ctx context.Context) error {
+	localMutex.Lock()
+	defer localMutex.Unlock()
+	if localMap[l.key] > 0 {
+		localMap[l.key]--
+	}
+	return nil
+}
+
+func (l *KeyStorLocal) Expire(ctx context.Context, ttl time.Duration) error {
+	return nil
+}
+
+func (l *KeyStorLocal) Ping(ctx context.Context) error {
+	return nil
+}
+
 type KeyStorRedis struct {
 	client redis.Cmdable
 	key    string
@@ -40,40 +85,6 @@ func (r *KeyStorRedis) Expire(ctx context.Context, ttl time.Duration) error {
 
 func (r *KeyStorRedis) Ping(ctx context.Context) error {
 	return r.client.Ping(ctx).Err()
-}
-
-type KeyStorLocal struct {
-	mutex sync.Mutex
-	val   int64
-	key   string
-}
-
-func NewKeyStorLocal(key string) KeyStor {
-	return &KeyStorLocal{key: key}
-}
-
-func (l *KeyStorLocal) Incr(ctx context.Context) (int64, error) {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
-	l.val++
-	return l.val, nil
-}
-
-func (l *KeyStorLocal) Decr(ctx context.Context) error {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
-	if l.val > 0 {
-		l.val--
-	}
-	return nil
-}
-
-func (l *KeyStorLocal) Expire(ctx context.Context, ttl time.Duration) error {
-	return nil
-}
-
-func (l *KeyStorLocal) Ping(ctx context.Context) error {
-	return nil
 }
 
 type KeyStorEtcd struct {
