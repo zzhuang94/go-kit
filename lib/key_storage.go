@@ -93,6 +93,10 @@ type KeyStorEtcd struct {
 	lease  clientv3.LeaseID
 }
 
+func NewKeyStorEtcd(client *clientv3.Client, key string) KeyStor {
+	return &KeyStorEtcd{client: client, key: key}
+}
+
 func (e *KeyStorEtcd) Incr(ctx context.Context) (int64, error) {
 	for {
 		resp, err := e.client.Get(ctx, e.key)
@@ -227,8 +231,4 @@ func (e *KeyStorEtcd) Ping(ctx context.Context) error {
 	}
 	_, err := e.client.Status(ctx, e.client.Endpoints()[0])
 	return err
-}
-
-func NewKeyStorEtcd(client *clientv3.Client, key string) KeyStor {
-	return &KeyStorEtcd{client: client, key: key}
 }

@@ -56,6 +56,7 @@ func tryOnce(s KeyStor, limit int) (*limiter, error) {
 	if int(res) <= limit {
 		l := new(limiter)
 		l.KeyStor = s
+		l.ctx, l.cancel = context.WithCancel(context.Background())
 		l.holding()
 		return l, nil
 	}
@@ -88,12 +89,12 @@ func (l *limiter) Release() {
 	if l.cancel != nil {
 		l.cancel()
 	}
-	l.decr()
+	l.KeyStor.Decr(context.Background())
 }
 
 func (l *limiter) holding() {
-	l.resetTTL()
-	l.ctx, l.cancel = context.WithCancel(context.Background())
+	l.KeyStor.Expire(l.ctx, TTL)
+
 	ticker := time.NewTicker(HOLD_INTERVAL)
 	done := func() bool {
 		select {
@@ -109,19 +110,7 @@ func (l *limiter) holding() {
 			if done() {
 				return
 			}
-			l.resetTTL()
+			l.KeyStor.Expire(l.ctx, TTL)
 		}
 	}()
-}
-
-func (l *limiter) resetTTL() {
-	if l.KeyStor != nil {
-		l.Expire(l.ctx, TTL)
-	}
-}
-
-func (l *limiter) decr() {
-	if l.KeyStor != nil {
-		l.Decr(l.ctx)
-	}
 }
