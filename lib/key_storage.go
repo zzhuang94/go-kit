@@ -202,12 +202,6 @@ func (e *KeyStorEtcd) Decr(ctx context.Context) error {
 }
 
 func (e *KeyStorEtcd) Expire(ctx context.Context, ttl time.Duration) error {
-	select {
-	case <-ctx.Done():
-		return ctx.Err()
-	default:
-	}
-
 	if e.lease == 0 {
 		resp, err := e.client.Get(ctx, e.key)
 		if err != nil {

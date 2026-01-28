@@ -96,30 +96,19 @@ func (l *limiter) holding() {
 	l.expire()
 
 	ticker := time.NewTicker(HOLD_INTERVAL)
-	done := func() bool {
-		select {
-		case <-l.ctx.Done():
-			return true
-		case <-ticker.C:
-			return false
-		}
-	}
 	go func() {
 		defer ticker.Stop()
 		for {
-			if done() {
+			select {
+			case <-l.ctx.Done():
 				return
+			case <-ticker.C:
+				l.expire()
 			}
-			l.expire()
 		}
 	}()
 }
 
 func (l *limiter) expire() {
-	select {
-	case <-l.ctx.Done():
-		return
-	default:
-		l.KeyStor.Expire(l.ctx, TTL)
-	}
+	l.KeyStor.Expire(context.Background(), TTL)
 }
