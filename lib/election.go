@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	ELE_TTL  = time.Second
-	ELE_TICK = time.Millisecond * 500
+	eleTTL  = time.Second
+	eleTICK = time.Millisecond * 500
 )
 
 type Election struct {
@@ -66,36 +66,35 @@ func (e *Election) start() {
 }
 
 func (e *Election) polling() {
-	ticker := time.NewTicker(ELE_TICK)
+	ticker := time.NewTicker(eleTICK)
 	for {
+		defer ticker.Stop()
 		select {
 		case <-e.ctx.Done():
-			atomic.StoreInt32(e.isMaster, 0)
-			ticker.Stop()
 			return
 		case <-ticker.C:
 			e.checkIsMaster()
 		}
 	}
-
 }
 
 func (e *Election) checkIsMaster() {
+	ctx := context.Background()
 	val := e.buildVal()
 	if e.IsMaster() {
-		currentVal, err := e.Get(e.ctx)
+		currentVal, err := e.Get(ctx)
 		if err != nil || val != currentVal {
 			atomic.StoreInt32(e.isMaster, 0)
 		}
 	} else {
-		success, err := e.SetNX(e.ctx, val, ELE_TTL)
+		success, err := e.SetNX(ctx, val, eleTTL)
 		if err == nil && success {
 			log.Printf("%s GET MASTER", e.val)
 			atomic.StoreInt32(e.isMaster, 1)
 		}
 	}
 	if e.IsMaster() {
-		e.Expire(e.ctx, ELE_TTL)
+		e.Expire(ctx, eleTTL)
 	}
 }
 

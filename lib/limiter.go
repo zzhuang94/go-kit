@@ -11,9 +11,9 @@ import (
 )
 
 const (
-	TTL           time.Duration = time.Second
-	TRY_INTERVAL  time.Duration = 50 * time.Millisecond
-	HOLD_INTERVAL time.Duration = 500 * time.Millisecond
+	limTTL          time.Duration = time.Second
+	limTryInterval  time.Duration = 50 * time.Millisecond
+	limHoldInterval time.Duration = 500 * time.Millisecond
 )
 
 type Limiter struct {
@@ -48,7 +48,7 @@ func tryCheckIn(s limStor, limit int, timeout time.Duration) (*Limiter, error) {
 		if time.Now().After(deadline) {
 			return nil, fmt.Errorf("timeout")
 		}
-		time.Sleep(TRY_INTERVAL)
+		time.Sleep(limTryInterval)
 	}
 }
 
@@ -103,7 +103,7 @@ func (l *Limiter) Release() {
 func (l *Limiter) holding() {
 	l.expire()
 
-	ticker := time.NewTicker(HOLD_INTERVAL)
+	ticker := time.NewTicker(limHoldInterval)
 	go func() {
 		defer ticker.Stop()
 		for {
@@ -118,5 +118,5 @@ func (l *Limiter) holding() {
 }
 
 func (l *Limiter) expire() {
-	l.Expire(context.Background(), TTL)
+	l.Expire(context.Background(), limTTL)
 }
