@@ -9,6 +9,7 @@ import (
 
 	redis "github.com/go-redis/redis/v8"
 	"github.com/zzhuang94/go-kit/str"
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 const (
@@ -17,22 +18,42 @@ const (
 )
 
 type Election struct {
+	eleStor
 	isMaster *int32
-	key      string
 	val      string
 	uuid     string
 	ctx      context.Context
 	cancel   context.CancelFunc
-	cmdable  redis.Cmdable
 }
 
-func NewElection(key, val string, cmdable redis.Cmdable) *Election {
+type eleStor interface {
+	Key() string
+	Get(ctx context.Context) (string, error)
+	Del(ctx context.Context) error
+	SetNX(ctx context.Context, value string, ttl time.Duration) (bool, error)
+	Expire(ctx context.Context, ttl time.Duration) error
+}
+
+func NewElectionWithRedis(cmdable redis.Cmdable, key, val string) *Election {
+	if cmdable == nil {
+		panic("redis client cannot be nil")
+	}
+	return newElection(NewRedisStor(cmdable, key), val)
+}
+
+func NewElectionWithEtcd(client *clientv3.Client, key, val string) *Election {
+	if client == nil {
+		panic("etcd client cannot be nil")
+	}
+	return newElection(NewEtcdStor(client, key), val)
+}
+
+func newElection(stor eleStor, val string) *Election {
 	e := &Election{
+		eleStor:  stor,
 		isMaster: new(int32),
-		key:      key,
 		val:      val,
 		uuid:     str.Uuid(),
-		cmdable:  cmdable,
 	}
 	e.start()
 	return e
@@ -60,28 +81,30 @@ func (e *Election) polling() {
 }
 
 func (e *Election) checkIsMaster() {
-	redisVal := e.buildRedisVal()
+	val := e.buildVal()
 	if e.IsMaster() {
-		if redisVal != e.getRedisVal() {
+		currentVal, err := e.Get(e.ctx)
+		if err != nil || val != currentVal {
 			atomic.StoreInt32(e.isMaster, 0)
 		}
 	} else {
-		if e.cmdable.SetNX(e.ctx, e.key, redisVal, ELE_TTL).Val() {
+		success, err := e.SetNX(e.ctx, val, ELE_TTL)
+		if err == nil && success {
 			log.Printf("%s GET MASTER", e.val)
 			atomic.StoreInt32(e.isMaster, 1)
 		}
 	}
 	if e.IsMaster() {
-		e.cmdable.Expire(e.ctx, e.key, ELE_TTL)
+		e.Expire(e.ctx, ELE_TTL)
 	}
 }
 
-func (e *Election) buildRedisVal() string {
+func (e *Election) buildVal() string {
 	return e.uuid + "|" + e.val
 }
 
-func (e *Election) getRedisVal() string {
-	v, _ := e.cmdable.Get(e.ctx, e.key).Result()
+func (e *Election) getVal() string {
+	v, _ := e.Get(e.ctx)
 	return v
 }
 
@@ -94,11 +117,11 @@ func (e *Election) Release() {
 		return
 	}
 	atomic.StoreInt32(e.isMaster, 0)
-	e.cmdable.Del(e.ctx, e.key)
+	e.Del(e.ctx)
 }
 
 func (e *Election) GetMaster() string {
-	v := e.getRedisVal()
+	v := e.getVal()
 	if v == "" {
 		return ""
 	}

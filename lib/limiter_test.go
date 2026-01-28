@@ -381,7 +381,7 @@ func TestLimiter_ConcurrentAccess(t *testing.T) {
 	var successCount int64
 	var errorCount int64
 	done := make(chan bool, 10)
-	limiters := make(chan *limiter, 10)
+	limiters := make(chan *Limiter, 10)
 
 	for i := 0; i < 10; i++ {
 		go func() {

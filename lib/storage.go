@@ -11,24 +11,16 @@ import (
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
-type KeyStor interface {
-	Key() string
-	Incr(ctx context.Context) (int64, error)
-	Decr(ctx context.Context) error
-	Expire(ctx context.Context, ttl time.Duration) error
-	Ping(ctx context.Context) error
-}
-
 var (
 	localMutex sync.Mutex
 	localMap   map[string]int64
 )
 
-type KeyStorLocal struct {
+type LocalStor struct {
 	key string
 }
 
-func NewKeyStorLocal(key string) KeyStor {
+func NewLocalStor(key string) *LocalStor {
 	localMutex.Lock()
 	defer localMutex.Unlock()
 	if localMap == nil {
@@ -37,21 +29,21 @@ func NewKeyStorLocal(key string) KeyStor {
 	if _, ok := localMap[key]; !ok {
 		localMap[key] = 0
 	}
-	return &KeyStorLocal{key: key}
+	return &LocalStor{key: key}
 }
 
-func (l *KeyStorLocal) Key() string {
+func (l *LocalStor) Key() string {
 	return l.key
 }
 
-func (l *KeyStorLocal) Incr(ctx context.Context) (int64, error) {
+func (l *LocalStor) Incr(ctx context.Context) (int64, error) {
 	localMutex.Lock()
 	defer localMutex.Unlock()
 	localMap[l.key]++
 	return localMap[l.key], nil
 }
 
-func (l *KeyStorLocal) Decr(ctx context.Context) error {
+func (l *LocalStor) Decr(ctx context.Context) error {
 	localMutex.Lock()
 	defer localMutex.Unlock()
 	if localMap[l.key] > 0 {
@@ -60,58 +52,70 @@ func (l *KeyStorLocal) Decr(ctx context.Context) error {
 	return nil
 }
 
-func (l *KeyStorLocal) Expire(ctx context.Context, ttl time.Duration) error {
+func (l *LocalStor) Expire(ctx context.Context, ttl time.Duration) error {
 	return nil
 }
 
-func (l *KeyStorLocal) Ping(ctx context.Context) error {
+func (l *LocalStor) Ping(ctx context.Context) error {
 	return nil
 }
 
-type KeyStorRedis struct {
+type RedisStor struct {
 	client redis.Cmdable
 	key    string
 }
 
-func NewKeyStorRedis(c redis.Cmdable, key string) KeyStor {
-	return &KeyStorRedis{client: c, key: key}
+func NewRedisStor(c redis.Cmdable, key string) *RedisStor {
+	return &RedisStor{client: c, key: key}
 }
 
-func (r *KeyStorRedis) Key() string {
+func (r *RedisStor) Key() string {
 	return r.key
 }
 
-func (r *KeyStorRedis) Incr(ctx context.Context) (int64, error) {
-	return r.client.Incr(ctx, r.key).Result()
-}
-
-func (r *KeyStorRedis) Decr(ctx context.Context) error {
-	return r.client.Decr(ctx, r.key).Err()
-}
-
-func (r *KeyStorRedis) Expire(ctx context.Context, ttl time.Duration) error {
-	return r.client.Expire(ctx, r.key, ttl).Err()
-}
-
-func (r *KeyStorRedis) Ping(ctx context.Context) error {
+func (r *RedisStor) Ping(ctx context.Context) error {
 	return r.client.Ping(ctx).Err()
 }
 
-type KeyStorEtcd struct {
+func (r *RedisStor) Get(ctx context.Context) (string, error) {
+	return r.client.Get(ctx, r.key).Result()
+}
+
+func (r *RedisStor) Del(ctx context.Context) error {
+	return r.client.Del(ctx, r.key).Err()
+}
+
+func (r *RedisStor) Incr(ctx context.Context) (int64, error) {
+	return r.client.Incr(ctx, r.key).Result()
+}
+
+func (r *RedisStor) Decr(ctx context.Context) error {
+	return r.client.Decr(ctx, r.key).Err()
+}
+
+func (r *RedisStor) Expire(ctx context.Context, ttl time.Duration) error {
+	return r.client.Expire(ctx, r.key, ttl).Err()
+}
+
+func (r *RedisStor) SetNX(ctx context.Context, value string, ttl time.Duration) (bool, error) {
+	return r.client.SetNX(ctx, r.key, value, ttl).Result()
+}
+
+type EtcdStor struct {
 	client *clientv3.Client
 	key    string
 	lease  clientv3.LeaseID
 }
 
-func NewKeyStorEtcd(client *clientv3.Client, key string) KeyStor {
-	return &KeyStorEtcd{client: client, key: key}
+func NewEtcdStor(client *clientv3.Client, key string) *EtcdStor {
+	return &EtcdStor{client: client, key: key}
 }
 
-func (e *KeyStorEtcd) Key() string {
+func (e *EtcdStor) Key() string {
 	return e.key
 }
 
-func (e *KeyStorEtcd) Incr(ctx context.Context) (int64, error) {
+func (e *EtcdStor) Incr(ctx context.Context) (int64, error) {
 	for {
 		resp, err := e.client.Get(ctx, e.key)
 		if err != nil {
@@ -156,7 +160,7 @@ func (e *KeyStorEtcd) Incr(ctx context.Context) (int64, error) {
 	}
 }
 
-func (e *KeyStorEtcd) Decr(ctx context.Context) error {
+func (e *EtcdStor) Decr(ctx context.Context) error {
 	for {
 		resp, err := e.client.Get(ctx, e.key)
 		if err != nil {
@@ -201,7 +205,7 @@ func (e *KeyStorEtcd) Decr(ctx context.Context) error {
 	}
 }
 
-func (e *KeyStorEtcd) Expire(ctx context.Context, ttl time.Duration) error {
+func (e *EtcdStor) Expire(ctx context.Context, ttl time.Duration) error {
 	if e.lease == 0 {
 		resp, err := e.client.Get(ctx, e.key)
 		if err != nil {
@@ -239,7 +243,62 @@ func (e *KeyStorEtcd) Expire(ctx context.Context, ttl time.Duration) error {
 	return err
 }
 
-func (e *KeyStorEtcd) Ping(ctx context.Context) error {
+func (e *EtcdStor) Ping(ctx context.Context) error {
 	_, err := e.client.Get(ctx, e.key)
+	return err
+}
+
+func (e *EtcdStor) SetNX(ctx context.Context, value string, ttl time.Duration) (bool, error) {
+	// Create lease for TTL first
+	lease, err := e.client.Grant(ctx, int64(ttl.Seconds()))
+	if err != nil {
+		return false, err
+	}
+
+	// Use transaction to atomically set if not exists
+	txn := e.client.Txn(ctx)
+	txn = txn.If(clientv3.Compare(clientv3.Version(e.key), "=", 0))
+	txn = txn.Then(clientv3.OpPut(e.key, value, clientv3.WithLease(lease.ID)))
+	txn = txn.Else(clientv3.OpGet(e.key))
+
+	tr, err := txn.Commit()
+	if err != nil {
+		e.client.Revoke(ctx, lease.ID)
+		return false, err
+	}
+
+	if tr.Succeeded {
+		// Successfully set the key, store the lease ID for future Expire calls
+		e.lease = lease.ID
+		return true, nil
+	}
+
+	// Transaction failed, key already exists
+	// Revoke the lease we created since we didn't use it
+	e.client.Revoke(ctx, lease.ID)
+	return false, nil
+}
+
+func (e *EtcdStor) Get(ctx context.Context) (string, error) {
+	resp, err := e.client.Get(ctx, e.key)
+	if err != nil {
+		return "", err
+	}
+	if len(resp.Kvs) == 0 {
+		return "", nil
+	}
+	return string(resp.Kvs[0].Value), nil
+}
+
+func (e *EtcdStor) Del(ctx context.Context) error {
+	if e.lease != 0 {
+		// Revoke lease first
+		_, err := e.client.Revoke(ctx, e.lease)
+		if err != nil {
+			return err
+		}
+		e.lease = 0
+	}
+	_, err := e.client.Delete(ctx, e.key)
 	return err
 }

@@ -16,14 +16,22 @@ const (
 	HOLD_INTERVAL time.Duration = 500 * time.Millisecond
 )
 
-type limiter struct {
-	KeyStor
+type Limiter struct {
+	limStor
 	released int32
 	ctx      context.Context
 	cancel   context.CancelFunc
 }
 
-func tryCheckIn(s KeyStor, limit int, timeout time.Duration) (*limiter, error) {
+type limStor interface {
+	Key() string
+	Ping(ctx context.Context) error
+	Incr(ctx context.Context) (int64, error)
+	Decr(ctx context.Context) error
+	Expire(ctx context.Context, ttl time.Duration) error
+}
+
+func tryCheckIn(s limStor, limit int, timeout time.Duration) (*Limiter, error) {
 	maxLimit := int(^uint(0) >> 1)
 	if limit > maxLimit {
 		return nil, fmt.Errorf("限制数不得大于[%d]", maxLimit)
@@ -44,7 +52,7 @@ func tryCheckIn(s KeyStor, limit int, timeout time.Duration) (*limiter, error) {
 	}
 }
 
-func tryOnce(s KeyStor, limit int) (*limiter, error) {
+func tryOnce(s limStor, limit int) (*Limiter, error) {
 	ctx := context.Background()
 	if err := s.Ping(ctx); err != nil {
 		return nil, err
@@ -54,8 +62,8 @@ func tryOnce(s KeyStor, limit int) (*limiter, error) {
 		return nil, err
 	}
 	if int(res) <= limit {
-		l := new(limiter)
-		l.KeyStor = s
+		l := new(Limiter)
+		l.limStor = s
 		l.ctx, l.cancel = context.WithCancel(context.Background())
 		l.holding()
 		return l, nil
@@ -64,35 +72,35 @@ func tryOnce(s KeyStor, limit int) (*limiter, error) {
 	return nil, nil
 }
 
-func TryCheckInWithRedis(c redis.Cmdable, k string, l int, t time.Duration) (*limiter, error) {
+func TryCheckInWithRedis(c redis.Cmdable, k string, l int, t time.Duration) (*Limiter, error) {
 	if c == nil {
 		return nil, fmt.Errorf("redis client cannot be nil")
 	}
-	return tryCheckIn(NewKeyStorRedis(c, k), l, t)
+	return tryCheckIn(NewRedisStor(c, k), l, t)
 }
 
-func TryCheckInWithEtcd(c *clientv3.Client, k string, l int, t time.Duration) (*limiter, error) {
+func TryCheckInWithEtcd(c *clientv3.Client, k string, l int, t time.Duration) (*Limiter, error) {
 	if c == nil {
 		return nil, fmt.Errorf("etcd client cannot be nil")
 	}
-	return tryCheckIn(NewKeyStorEtcd(c, k), l, t)
+	return tryCheckIn(NewEtcdStor(c, k), l, t)
 }
 
-func TryCheckInLocal(k string, l int, t time.Duration) (*limiter, error) {
-	return tryCheckIn(NewKeyStorLocal(k), l, t)
+func TryCheckInLocal(k string, l int, t time.Duration) (*Limiter, error) {
+	return tryCheckIn(NewLocalStor(k), l, t)
 }
 
-func (l *limiter) Release() {
+func (l *Limiter) Release() {
 	if !atomic.CompareAndSwapInt32(&l.released, 0, 1) {
 		return
 	}
 	if l.cancel != nil {
 		l.cancel()
 	}
-	l.KeyStor.Decr(context.Background())
+	l.Decr(context.Background())
 }
 
-func (l *limiter) holding() {
+func (l *Limiter) holding() {
 	l.expire()
 
 	ticker := time.NewTicker(HOLD_INTERVAL)
@@ -109,6 +117,6 @@ func (l *limiter) holding() {
 	}()
 }
 
-func (l *limiter) expire() {
-	l.KeyStor.Expire(context.Background(), TTL)
+func (l *Limiter) expire() {
+	l.Expire(context.Background(), TTL)
 }
