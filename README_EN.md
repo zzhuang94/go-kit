@@ -39,7 +39,7 @@ Convenient time operation utilities supporting formatting, parsing, calculations
 Complete encryption toolkit including SHA series hashing (SHA1, SHA256, SHA512), AES encryption/decryption, and Base64 encoding/decoding.
 
 ### 🛠️ General Utilities (lib)
-Practical general utility collection including random operations (random selection, shuffle), Shell command execution, log management (based on logrus with log rotation), distributed locks (Redis-based), rate limiter (supports Redis and local mode), and distributed election (Redis-based).
+Practical general utility collection including Shell command execution, log management (based on logrus with log rotation), distributed locks (supports Redis, etcd, and local modes), rate limiter (supports Redis, etcd, and local modes), and distributed election (supports Redis and etcd).
 
 ### 💾 Database Operations (db)
 Database connection utilities supporting MySQL (GORM, XORM), Redis (standalone, cluster), and etcd connections.
@@ -239,17 +239,22 @@ Powerful HTTP request utilities and IP address handling, supporting GET, POST, P
 - `crypto.Base64DecodeString(s)` - Base64 decoding (string)
 
 ### 🛠️ General Utilities (lib)
-- `lib.Choice(slice)` - Randomly select an element from slice
-- `lib.Shuffle(slice)` - Randomly shuffle slice
 - `lib.RunCmd(cmd, timeout...)` - Execute Shell command with optional timeout
 - `logCfg.InitLogrus()` - Initialize global logrus logger
 - `logCfg.BuildLogger()` - Create new logrus Logger instance
+- `logCfg.ParseLevel()` - Parse log level
+- `logCfg.BuildLogWriter()` - Build log writer (supports log rotation)
 - `lib.GetFormatter()` - Get custom log formatter
-- `lib.TryLock(c, key, timeout)` - Try to acquire distributed lock
+- `lib.TryLockWithRedis(c, key, timeout)` - Try to acquire distributed lock using Redis
+- `lib.TryLockWithEtcd(c, key, timeout)` - Try to acquire distributed lock using etcd
+- `lib.TryLockLocal(key, timeout)` - Try to acquire distributed lock using local mode
 - `lock.Release()` - Release lock
-- `lib.TryCheckIn(c, key, limit, timeout)` - Try to check in to rate limiter
+- `lib.TryCheckInWithRedis(c, key, limit, timeout)` - Try to check in to rate limiter using Redis
+- `lib.TryCheckInWithEtcd(c, key, limit, timeout)` - Try to check in to rate limiter using etcd
+- `lib.TryCheckInLocal(key, limit, timeout)` - Try to check in to rate limiter using local mode
 - `limiter.Release()` - Release rate limiter resource
-- `lib.NewElection(key, val, cmdable)` - Create election instance
+- `lib.NewElectionWithRedis(cmdable, key, val)` - Create election instance using Redis
+- `lib.NewElectionWithEtcd(client, key, val)` - Create election instance using etcd
 - `election.IsMaster()` - Check if current instance is master
 - `election.GetMaster()` - Get current master node value
 - `election.Release()` - Release master status

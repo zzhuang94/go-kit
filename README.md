@@ -39,7 +39,7 @@
 完整的加密工具集，包括 SHA 系列哈希（SHA1、SHA256、SHA512）、AES 加密解密和 Base64 编码解码。
 
 ### 🛠️ 通用工具库 (lib)
-实用的通用工具集合，包括随机数操作（随机选择、打乱）、Shell 命令执行、日志管理（基于 logrus，支持日志轮转）、分布式锁（基于 Redis）、限流器（支持 Redis 和本地模式）和分布式选举（基于 Redis）。
+实用的通用工具集合，包括 Shell 命令执行、日志管理（基于 logrus，支持日志轮转）、分布式锁（支持 Redis、etcd 和本地模式）、限流器（支持 Redis、etcd 和本地模式）和分布式选举（支持 Redis 和 etcd）。
 
 ### 💾 数据库操作 (db)
 数据库连接工具，支持 MySQL（GORM、XORM）、Redis（单机、集群）和 etcd 连接。
@@ -239,17 +239,22 @@
 - `crypto.Base64DecodeString(s)` - Base64解码（字符串）
 
 ### 🛠️ 通用工具库 (lib)
-- `lib.Choice(slice)` - 从切片中随机选择一个元素
-- `lib.Shuffle(slice)` - 随机打乱切片
 - `lib.RunCmd(cmd, timeout...)` - 执行 Shell 命令，支持超时设置
 - `logCfg.InitLogrus()` - 初始化全局 logrus 日志
 - `logCfg.BuildLogger()` - 创建新的 logrus Logger 实例
+- `logCfg.ParseLevel()` - 解析日志级别
+- `logCfg.BuildLogWriter()` - 构建日志写入器（支持日志轮转）
 - `lib.GetFormatter()` - 获取自定义日志格式化器
-- `lib.TryLock(c, key, timeout)` - 尝试获取分布式锁
+- `lib.TryLockWithRedis(c, key, timeout)` - 使用 Redis 尝试获取分布式锁
+- `lib.TryLockWithEtcd(c, key, timeout)` - 使用 etcd 尝试获取分布式锁
+- `lib.TryLockLocal(key, timeout)` - 使用本地模式尝试获取分布式锁
 - `lock.Release()` - 释放锁
-- `lib.TryCheckIn(c, key, limit, timeout)` - 尝试进入限流器
+- `lib.TryCheckInWithRedis(c, key, limit, timeout)` - 使用 Redis 尝试进入限流器
+- `lib.TryCheckInWithEtcd(c, key, limit, timeout)` - 使用 etcd 尝试进入限流器
+- `lib.TryCheckInLocal(key, limit, timeout)` - 使用本地模式尝试进入限流器
 - `limiter.Release()` - 释放限流器资源
-- `lib.NewElection(key, val, cmdable)` - 创建选举实例
+- `lib.NewElectionWithRedis(cmdable, key, val)` - 使用 Redis 创建选举实例
+- `lib.NewElectionWithEtcd(client, key, val)` - 使用 etcd 创建选举实例
 - `election.IsMaster()` - 检查当前实例是否为主节点
 - `election.GetMaster()` - 获取当前主节点的值
 - `election.Release()` - 释放主节点身份
