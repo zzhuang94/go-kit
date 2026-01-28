@@ -159,12 +159,12 @@ func TestTryCheckInWithEtcd(t *testing.T) {
 	etcdClient := db.GetTestEtcd()
 	ctx := context.Background()
 	// Test etcd connection by trying to get a key
-	_, err := etcdClient.Get(ctx, "test_connection_check")
+	_, err := etcdClient.Get(ctx, "/hzz/test_connection_check")
 	if err != nil {
 		t.Skipf("Etcd is not available, skipping limiter tests: %v", err)
 	}
 
-	key := "test_limiter_etcd"
+	key := "/hzz/test_limiter_etcd"
 	limit := 3
 	timeout := 2 * time.Second
 
@@ -217,12 +217,12 @@ func TestTryCheckInWithEtcd_Release(t *testing.T) {
 	etcdClient := db.GetTestEtcd()
 	ctx := context.Background()
 	// Test etcd connection by trying to get a key
-	_, err := etcdClient.Get(ctx, "test_connection_check")
+	_, err := etcdClient.Get(ctx, "/hzz/test_connection_check")
 	if err != nil {
 		t.Skipf("Etcd is not available, skipping limiter tests: %v", err)
 	}
 
-	key := "test_limiter_etcd_release"
+	key := "/hzz/test_limiter_etcd_release"
 	limit := 2
 	timeout := 2 * time.Second
 
@@ -264,12 +264,12 @@ func TestTryCheckInWithEtcd_Timeout(t *testing.T) {
 	etcdClient := db.GetTestEtcd()
 	ctx := context.Background()
 	// Test etcd connection by trying to get a key
-	_, err := etcdClient.Get(ctx, "test_connection_check")
+	_, err := etcdClient.Get(ctx, "/hzz/test_connection_check")
 	if err != nil {
 		t.Skipf("Etcd is not available, skipping limiter tests: %v", err)
 	}
 
-	key := "test_limiter_etcd_timeout"
+	key := "/hzz/test_limiter_etcd_timeout"
 	limit := 1
 	timeout := 100 * time.Millisecond
 
@@ -299,7 +299,7 @@ func TestTryCheckInWithEtcd_Timeout(t *testing.T) {
 }
 
 func TestTryCheckInWithEtcd_NilClient(t *testing.T) {
-	_, err := TryCheckInWithEtcd(nil, "test_key", 1, time.Second)
+	_, err := TryCheckInWithEtcd(nil, "/hzz/test_key", 1, time.Second)
 	if err == nil {
 		t.Error("TryCheckInWithEtcd should return error when client is nil")
 	}

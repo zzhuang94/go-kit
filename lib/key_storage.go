@@ -12,6 +12,7 @@ import (
 )
 
 type KeyStor interface {
+	Key() string
 	Incr(ctx context.Context) (int64, error)
 	Decr(ctx context.Context) error
 	Expire(ctx context.Context, ttl time.Duration) error
@@ -37,6 +38,10 @@ func NewKeyStorLocal(key string) KeyStor {
 		localMap[key] = 0
 	}
 	return &KeyStorLocal{key: key}
+}
+
+func (l *KeyStorLocal) Key() string {
+	return l.key
 }
 
 func (l *KeyStorLocal) Incr(ctx context.Context) (int64, error) {
@@ -71,6 +76,11 @@ type KeyStorRedis struct {
 func NewKeyStorRedis(c redis.Cmdable, key string) KeyStor {
 	return &KeyStorRedis{client: c, key: key}
 }
+
+func (r *KeyStorRedis) Key() string {
+	return r.key
+}
+
 func (r *KeyStorRedis) Incr(ctx context.Context) (int64, error) {
 	return r.client.Incr(ctx, r.key).Result()
 }
@@ -95,6 +105,10 @@ type KeyStorEtcd struct {
 
 func NewKeyStorEtcd(client *clientv3.Client, key string) KeyStor {
 	return &KeyStorEtcd{client: client, key: key}
+}
+
+func (e *KeyStorEtcd) Key() string {
+	return e.key
 }
 
 func (e *KeyStorEtcd) Incr(ctx context.Context) (int64, error) {
@@ -226,9 +240,6 @@ func (e *KeyStorEtcd) Expire(ctx context.Context, ttl time.Duration) error {
 }
 
 func (e *KeyStorEtcd) Ping(ctx context.Context) error {
-	if len(e.client.Endpoints()) == 0 {
-		return fmt.Errorf("no etcd endpoints configured")
-	}
-	_, err := e.client.Status(ctx, e.client.Endpoints()[0])
+	_, err := e.client.Get(ctx, e.key)
 	return err
 }
