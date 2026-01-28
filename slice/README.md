@@ -4,11 +4,8 @@
 
 ## 基础操作
 
-- `Contains[T comparable](slice []T, item T) bool` - 检查切片是否包含指定元素
-- `IndexOf[T comparable](slice []T, item T) int` - 查找元素在切片中的索引
 - `LastIndexOf[T comparable](slice []T, item T) int` - 从后往前查找元素索引
 - `Unique[T comparable](slice []T) []T` - 去除重复元素
-- `Reverse[T any](slice []T) []T` - 反转切片
 - `Shuffle[T any](slice []T) []T` - 随机打乱切片
 - `Chunk[T any](slice []T, size int) [][]T` - 将切片分块
 - `Flatten[T any](slices [][]T) []T` - 扁平化嵌套切片
@@ -55,9 +52,7 @@ import (
 func main() {
 	// 基础操作
 	numbers := []int{1, 2, 3, 2, 4, 5}
-	fmt.Println(slice.Contains(numbers, 3))        // true
 	fmt.Println(slice.Unique(numbers))               // [1, 2, 3, 4, 5]
-	fmt.Println(slice.Reverse(numbers))              // [5, 4, 2, 3, 2, 1]
 	
 	// 过滤和查找
 	even := slice.Filter(numbers, func(x int) bool {

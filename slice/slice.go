@@ -5,26 +5,6 @@ import (
 	"time"
 )
 
-// Contains 检查切片是否包含指定元素 / Check if slice contains element
-func Contains[T comparable](slice []T, item T) bool {
-	for _, v := range slice {
-		if v == item {
-			return true
-		}
-	}
-	return false
-}
-
-// IndexOf 查找元素在切片中的索引，不存在返回 -1 / Find element index in slice, return -1 if not found
-func IndexOf[T comparable](slice []T, item T) int {
-	for i, v := range slice {
-		if v == item {
-			return i
-		}
-	}
-	return -1
-}
-
 // LastIndexOf 从后往前查找元素在切片中的索引，不存在返回 -1 / Find element index from end, return -1 if not found
 func LastIndexOf[T comparable](slice []T, item T) int {
 	for i := len(slice) - 1; i >= 0; i-- {
@@ -44,15 +24,6 @@ func Unique[T comparable](slice []T) []T {
 			seen[v] = true
 			result = append(result, v)
 		}
-	}
-	return result
-}
-
-// Reverse 反转切片 / Reverse slice
-func Reverse[T any](slice []T) []T {
-	result := make([]T, len(slice))
-	for i, j := 0, len(slice)-1; i < len(slice); i, j = i+1, j-1 {
-		result[i] = slice[j]
 	}
 	return result
 }

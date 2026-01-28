@@ -4,26 +4,6 @@ import (
 	"testing"
 )
 
-func TestContains(t *testing.T) {
-	slice := []int{1, 2, 3, 4, 5}
-	if !Contains(slice, 3) {
-		t.Error("Contains failed")
-	}
-	if Contains(slice, 6) {
-		t.Error("Contains failed")
-	}
-}
-
-func TestIndexOf(t *testing.T) {
-	slice := []string{"a", "b", "c"}
-	if IndexOf(slice, "b") != 1 {
-		t.Error("IndexOf failed")
-	}
-	if IndexOf(slice, "d") != -1 {
-		t.Error("IndexOf failed")
-	}
-}
-
 func TestLastIndexOf(t *testing.T) {
 	slice := []int{1, 2, 3, 2, 4}
 	if LastIndexOf(slice, 2) != 3 {
@@ -36,14 +16,6 @@ func TestUnique(t *testing.T) {
 	result := Unique(slice)
 	if len(result) != 3 {
 		t.Errorf("Expected 3 unique elements, got %d", len(result))
-	}
-}
-
-func TestReverse(t *testing.T) {
-	slice := []int{1, 2, 3, 4}
-	result := Reverse(slice)
-	if result[0] != 4 || result[3] != 1 {
-		t.Error("Reverse failed")
 	}
 }
 

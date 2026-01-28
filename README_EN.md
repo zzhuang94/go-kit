@@ -116,11 +116,8 @@ Powerful HTTP request utilities and IP address handling, supporting GET, POST, P
 - `str.IsBlank(s)` - Check if string is blank (empty or only whitespace)
 
 ### 📊 Slice Operations (slice)
-- `slice.Contains(slice, item)` - Check if slice contains element
-- `slice.IndexOf(slice, item)` - Find element index in slice, return -1 if not found
 - `slice.LastIndexOf(slice, item)` - Find element index from end, return -1 if not found
 - `slice.Unique(slice)` - Remove duplicate elements
-- `slice.Reverse(slice)` - Reverse slice
 - `slice.Shuffle(slice)` - Randomly shuffle slice
 - `slice.Chunk(slice, size)` - Split slice into chunks
 - `slice.Flatten(slices)` - Flatten nested slices

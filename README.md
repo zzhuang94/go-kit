@@ -116,11 +116,8 @@
 - `str.IsBlank(s)` - 检查字符串是否为空白（空或只包含空白字符）
 
 ### 📊 切片操作 (slice)
-- `slice.Contains(slice, item)` - 检查切片是否包含指定元素
-- `slice.IndexOf(slice, item)` - 查找元素在切片中的索引，不存在返回 -1
 - `slice.LastIndexOf(slice, item)` - 从后往前查找元素在切片中的索引，不存在返回 -1
 - `slice.Unique(slice)` - 去除重复元素
-- `slice.Reverse(slice)` - 反转切片
 - `slice.Shuffle(slice)` - 随机打乱切片
 - `slice.Chunk(slice, size)` - 将切片分块
 - `slice.Flatten(slices)` - 扁平化嵌套切片

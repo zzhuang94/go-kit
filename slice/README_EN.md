@@ -4,11 +4,8 @@ Provides common slice operation utility functions with generics support.
 
 ## Basic Operations
 
-- `Contains[T comparable](slice []T, item T) bool` - Check if slice contains element
-- `IndexOf[T comparable](slice []T, item T) int` - Find element index in slice
 - `LastIndexOf[T comparable](slice []T, item T) int` - Find element index from end
 - `Unique[T comparable](slice []T) []T` - Remove duplicate elements
-- `Reverse[T any](slice []T) []T` - Reverse slice
 - `Shuffle[T any](slice []T) []T` - Randomly shuffle slice
 - `Chunk[T any](slice []T, size int) [][]T` - Split slice into chunks
 - `Flatten[T any](slices [][]T) []T` - Flatten nested slices
@@ -55,9 +52,7 @@ import (
 func main() {
 	// Basic operations
 	numbers := []int{1, 2, 3, 2, 4, 5}
-	fmt.Println(slice.Contains(numbers, 3))        // true
 	fmt.Println(slice.Unique(numbers))               // [1, 2, 3, 4, 5]
-	fmt.Println(slice.Reverse(numbers))              // [5, 4, 2, 3, 2, 1]
 	
 	// Filter and find
 	even := slice.Filter(numbers, func(x int) bool {
