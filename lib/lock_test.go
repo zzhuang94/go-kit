@@ -135,12 +135,12 @@ func TestTryLockWithEtcd(t *testing.T) {
 	etcdClient := db.GetTestEtcd()
 	ctx := context.Background()
 	// Test etcd connection by trying to get a key
-	_, err := etcdClient.Get(ctx, "test_connection_check")
+	_, err := etcdClient.Get(ctx, "/hzz/test_connection_check")
 	if err != nil {
 		t.Skipf("Etcd is not available, skipping lock tests: %v", err)
 	}
 
-	key := "test_lock_etcd"
+	key := "/hzz/test_lock_etcd"
 	timeout := 2 * time.Second
 
 	// Clean up
@@ -175,12 +175,12 @@ func TestTryLockWithEtcd_Release(t *testing.T) {
 	etcdClient := db.GetTestEtcd()
 	ctx := context.Background()
 	// Test etcd connection by trying to get a key
-	_, err := etcdClient.Get(ctx, "test_connection_check")
+	_, err := etcdClient.Get(ctx, "/hzz/test_connection_check")
 	if err != nil {
 		t.Skipf("Etcd is not available, skipping lock tests: %v", err)
 	}
 
-	key := "test_lock_etcd_release"
+	key := "/hzz/test_lock_etcd_release"
 	timeout := 2 * time.Second
 
 	// Clean up
@@ -216,12 +216,12 @@ func TestTryLockWithEtcd_Timeout(t *testing.T) {
 	etcdClient := db.GetTestEtcd()
 	ctx := context.Background()
 	// Test etcd connection by trying to get a key
-	_, err := etcdClient.Get(ctx, "test_connection_check")
+	_, err := etcdClient.Get(ctx, "/hzz/test_connection_check")
 	if err != nil {
 		t.Skipf("Etcd is not available, skipping lock tests: %v", err)
 	}
 
-	key := "test_lock_etcd_timeout"
+	key := "/hzz/test_lock_etcd_timeout"
 	timeout := 100 * time.Millisecond
 
 	// Clean up
@@ -250,7 +250,7 @@ func TestTryLockWithEtcd_Timeout(t *testing.T) {
 }
 
 func TestTryLockWithEtcd_NilClient(t *testing.T) {
-	_, err := TryLockWithEtcd(nil, "test_key", time.Second)
+	_, err := TryLockWithEtcd(nil, "/hzz/test_key", time.Second)
 	if err == nil {
 		t.Error("TryLockWithEtcd should return error when client is nil")
 	}

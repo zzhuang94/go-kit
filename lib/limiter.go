@@ -93,7 +93,7 @@ func (l *limiter) Release() {
 }
 
 func (l *limiter) holding() {
-	l.KeyStor.Expire(l.ctx, TTL)
+	l.expire()
 
 	ticker := time.NewTicker(HOLD_INTERVAL)
 	done := func() bool {
@@ -110,7 +110,16 @@ func (l *limiter) holding() {
 			if done() {
 				return
 			}
-			l.KeyStor.Expire(l.ctx, TTL)
+			l.expire()
 		}
 	}()
+}
+
+func (l *limiter) expire() {
+	select {
+	case <-l.ctx.Done():
+		return
+	default:
+		l.KeyStor.Expire(l.ctx, TTL)
+	}
 }
