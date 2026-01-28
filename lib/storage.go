@@ -130,26 +130,13 @@ func (e *EtcdStor) Incr(ctx context.Context) (int64, error) {
 		}
 		nval := val + 1
 		valStr := strconv.FormatInt(nval, 10)
-		if e.lease == 0 {
-			lease, err := e.client.Grant(ctx, int64(TTL.Seconds()))
-			if err != nil {
-				return 0, err
-			}
-			e.lease = lease.ID
-		}
-		lid := e.lease
 		txn := e.client.Txn(ctx)
 		if len(resp.Kvs) > 0 {
-			txn = txn.If(
-				clientv3.Compare(clientv3.Version(e.key), "=", resp.Kvs[0].Version),
-			)
+			txn = txn.If(e.checkVersion(resp.Kvs[0].Version))
 		} else {
-			txn = txn.If(clientv3.Compare(clientv3.Version(e.key), "=", 0))
+			txn = txn.If(e.checkVersion(0))
 		}
-		txn = txn.Then(
-			clientv3.OpPut(e.key, valStr, clientv3.WithLease(lid)),
-		)
-		txn = txn.Else(clientv3.OpGet(e.key))
+		txn = txn.Then(clientv3.OpPut(e.key, valStr))
 		tr, err := txn.Commit()
 		if err != nil {
 			return 0, err
@@ -179,22 +166,9 @@ func (e *EtcdStor) Decr(ctx context.Context) error {
 		}
 		nval := val - 1
 		valStr := strconv.FormatInt(nval, 10)
-		if e.lease == 0 {
-			lease, err := e.client.Grant(ctx, int64(TTL.Seconds()))
-			if err != nil {
-				return err
-			}
-			e.lease = lease.ID
-		}
-		lid := e.lease
 		txn := e.client.Txn(ctx)
-		txn = txn.If(
-			clientv3.Compare(clientv3.Version(e.key), "=", resp.Kvs[0].Version),
-		)
-		txn = txn.Then(
-			clientv3.OpPut(e.key, valStr, clientv3.WithLease(lid)),
-		)
-		txn = txn.Else(clientv3.OpGet(e.key))
+		txn = txn.If(e.checkVersion(resp.Kvs[0].Version))
+		txn = txn.Then(clientv3.OpPut(e.key, valStr))
 		tr, err := txn.Commit()
 		if err != nil {
 			return err
@@ -220,16 +194,8 @@ func (e *EtcdStor) Expire(ctx context.Context, ttl time.Duration) error {
 		}
 		e.lease = lease.ID
 		txn := e.client.Txn(ctx)
-		txn = txn.If(
-			clientv3.Compare(clientv3.Version(e.key), "=", resp.Kvs[0].Version),
-		)
-		txn = txn.Then(
-			clientv3.OpPut(
-				e.key,
-				string(resp.Kvs[0].Value),
-				clientv3.WithLease(lease.ID),
-			),
-		)
+		txn = txn.If(e.checkVersion(resp.Kvs[0].Version))
+		txn = txn.Then(e.putTtl(string(resp.Kvs[0].Value), e.lease))
 		tr, err := txn.Commit()
 		if err != nil {
 			return err
@@ -249,33 +215,28 @@ func (e *EtcdStor) Ping(ctx context.Context) error {
 }
 
 func (e *EtcdStor) SetNX(ctx context.Context, value string, ttl time.Duration) (bool, error) {
-	// Create lease for TTL first
 	lease, err := e.client.Grant(ctx, int64(ttl.Seconds()))
 	if err != nil {
 		return false, err
 	}
 
-	// Use transaction to atomically set if not exists
+	lid := lease.ID
 	txn := e.client.Txn(ctx)
-	txn = txn.If(clientv3.Compare(clientv3.Version(e.key), "=", 0))
-	txn = txn.Then(clientv3.OpPut(e.key, value, clientv3.WithLease(lease.ID)))
-	txn = txn.Else(clientv3.OpGet(e.key))
+	txn = txn.If(e.checkVersion(0))
+	txn = txn.Then(e.putTtl(value, lid))
 
 	tr, err := txn.Commit()
 	if err != nil {
-		e.client.Revoke(ctx, lease.ID)
+		e.client.Revoke(ctx, lid)
 		return false, err
 	}
 
 	if tr.Succeeded {
-		// Successfully set the key, store the lease ID for future Expire calls
-		e.lease = lease.ID
+		e.lease = lid
 		return true, nil
 	}
 
-	// Transaction failed, key already exists
-	// Revoke the lease we created since we didn't use it
-	e.client.Revoke(ctx, lease.ID)
+	e.client.Revoke(ctx, lid)
 	return false, nil
 }
 
@@ -301,4 +262,12 @@ func (e *EtcdStor) Del(ctx context.Context) error {
 	}
 	_, err := e.client.Delete(ctx, e.key)
 	return err
+}
+
+func (e *EtcdStor) checkVersion(ver int64) clientv3.Cmp {
+	return clientv3.Compare(clientv3.Version(e.key), "=", ver)
+}
+
+func (e *EtcdStor) putTtl(val string, lid clientv3.LeaseID) clientv3.Op {
+	return clientv3.OpPut(e.key, val, clientv3.WithLease(lid))
 }
