@@ -2,6 +2,7 @@ package lib
 
 import (
 	"context"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -377,19 +378,19 @@ func TestLimiter_ConcurrentAccess(t *testing.T) {
 	rdb.Del(ctx, key)
 
 	// Create multiple goroutines trying to get limiters
-	successCount := 0
-	errorCount := 0
+	var successCount int64
+	var errorCount int64
 	done := make(chan bool, 10)
+	limiters := make(chan *limiter, 10)
 
 	for i := 0; i < 10; i++ {
 		go func() {
 			limiter, err := TryCheckInWithRedis(rdb, key, limit, timeout)
 			if err != nil {
-				errorCount++
+				atomic.AddInt64(&errorCount, 1)
 			} else {
-				successCount++
-				time.Sleep(50 * time.Millisecond)
-				limiter.Release()
+				atomic.AddInt64(&successCount, 1)
+				limiters <- limiter
 			}
 			done <- true
 		}()
@@ -400,9 +401,15 @@ func TestLimiter_ConcurrentAccess(t *testing.T) {
 		<-done
 	}
 
+	// Close limiters channel and release all acquired limiters
+	close(limiters)
+	for limiter := range limiters {
+		limiter.Release()
+	}
+
 	// Should have exactly `limit` successful acquisitions
-	if successCount != limit {
-		t.Errorf("Expected %d successful acquisitions, got %d", limit, successCount)
+	if atomic.LoadInt64(&successCount) != int64(limit) {
+		t.Errorf("Expected %d successful acquisitions, got %d", limit, atomic.LoadInt64(&successCount))
 	}
 
 	// Cleanup
