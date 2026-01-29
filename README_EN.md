@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/zzhuang94/go-kit?style=flat-square)](https://goreportcard.com/report/github.com/zzhuang94/go-kit)
 
-**go-kit** is a carefully designed collection of Go utility libraries, providing developers with clean implementations of common functionalities. Whether you need file operations, string processing, data structures, time handling, or encryption/decryption, we have the utility functions you need. All functions are thoughtfully designed, support generics, provide comprehensive error handling, and come with detailed bilingual documentation.
+**go-kit** is a carefully designed collection of Go utility libraries, providing developers with clean implementations of common functionalities. Whether you need file operations, string processing, data structures, or encryption/decryption, we have the utility functions you need. All functions are thoughtfully designed, support generics, provide comprehensive error handling, and come with detailed bilingual documentation.
 
 ## ✨ Features
 
@@ -31,9 +31,6 @@ Powerful slice operation utilities supporting deduplication, reversal, chunking,
 
 ### 🔢 Algorithms & Data Structures (algo)
 Generic implementations of common data structures and algorithms including Stack, Queue, Set, LRU Cache, sorting algorithms (quicksort), and search algorithms (binary search, linear search, etc.) with excellent performance and clean APIs.
-
-### ⏰ Time Handling (time)
-Convenient time operation utilities supporting formatting, parsing, calculations (add, subtract, diff, etc.), making time handling simple and intuitive.
 
 ### 🔐 Crypto Tools (crypto)
 Complete encryption toolkit including SHA series hashing (SHA1, SHA256, SHA512), AES encryption/decryption, and Base64 encoding/decoding.
@@ -190,31 +187,6 @@ Powerful HTTP request utilities and IP address handling, supporting GET, POST, P
 - `algo.FindLast(slice, fn)` - Find last element index matching condition, return -1 if not found
 - `algo.LowerBound(slice, target)` - Find first element index >= target
 - `algo.UpperBound(slice, target)` - Find first element index > target
-
-### ⏰ Time Handling (time)
-- `time.Format(t, layout)` - Format time to string
-- `time.FormatDate(t)` - Format date (YYYY-MM-DD)
-- `time.FormatTime(t)` - Format time (HH:mm:ss)
-- `time.FormatDateTime(t)` - Format date and time (YYYY-MM-DD HH:mm:ss)
-- `time.FormatTimestamp(t)` - Format timestamp
-- `time.Parse(layout, value)` - Parse time string
-- `time.ParseDate(value)` - Parse date string (YYYY-MM-DD)
-- `time.ParseTime(value)` - Parse time string (HH:mm:ss)
-- `time.ParseDateTime(value)` - Parse date and time string (YYYY-MM-DD HH:mm:ss)
-- `time.AddDays(t, days)` - Add days
-- `time.AddHours(t, hours)` - Add hours
-- `time.AddMinutes(t, minutes)` - Add minutes
-- `time.DiffDays(t1, t2)` - Calculate days difference
-- `time.DiffHours(t1, t2)` - Calculate hours difference
-- `time.DiffMinutes(t1, t2)` - Calculate minutes difference
-- `time.IsToday(t)` - Check if time is today
-- `time.IsYesterday(t)` - Check if time is yesterday
-- `time.IsTomorrow(t)` - Check if time is tomorrow
-- `time.StartOfDay(t)` - Get start of day
-- `time.EndOfDay(t)` - Get end of day
-- `time.StartOfWeek(t)` - Get start of week (Monday)
-- `time.StartOfMonth(t)` - Get start of month
-- `time.StartOfYear(t)` - Get start of year
 
 ### 🔐 Crypto Tools (crypto)
 - `crypto.SHA1(data)` - Calculate SHA1 hash of byte array

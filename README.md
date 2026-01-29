@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/zzhuang94/go-kit?style=flat-square)](https://goreportcard.com/report/github.com/zzhuang94/go-kit)
 
-**go-kit** 是一个精心设计的 Go 语言工具库集合，旨在为开发者提供常用功能的简洁实现。无论是文件操作、字符串处理、数据结构，还是时间处理、加密解密，这里都有你需要的工具函数。所有函数都经过精心设计，支持泛型，提供完整的错误处理，并附带详细的中英文文档。
+**go-kit** 是一个精心设计的 Go 语言工具库集合，旨在为开发者提供常用功能的简洁实现。无论是文件操作、字符串处理、数据结构，还是加密解密，这里都有你需要的工具函数。所有函数都经过精心设计，支持泛型，提供完整的错误处理，并附带详细的中英文文档。
 
 ## ✨ 特性
 
@@ -31,9 +31,6 @@
 
 ### 🔢 算法与数据结构 (algo)
 常用数据结构和算法的泛型实现，包括栈（Stack）、队列（Queue）、集合（Set）、LRU 缓存，以及排序算法（快速排序）和搜索算法（二分查找、线性查找等），性能优异，API 简洁。
-
-### ⏰ 时间处理 (time)
-便捷的时间操作工具，支持格式化、解析、计算（加减、差值、判断等），让时间处理变得简单直观。
 
 ### 🔐 加密工具 (crypto)
 完整的加密工具集，包括 SHA 系列哈希（SHA1、SHA256、SHA512）、AES 加密解密和 Base64 编码解码。
@@ -190,31 +187,6 @@
 - `algo.FindLast(slice, fn)` - 查找最后一个满足条件的元素索引，不存在返回 -1
 - `algo.LowerBound(slice, target)` - 查找第一个大于等于目标值的元素索引
 - `algo.UpperBound(slice, target)` - 查找第一个大于目标值的元素索引
-
-### ⏰ 时间处理 (time)
-- `time.Format(t, layout)` - 格式化时间为字符串
-- `time.FormatDate(t)` - 格式化日期（YYYY-MM-DD）
-- `time.FormatTime(t)` - 格式化时间（HH:mm:ss）
-- `time.FormatDateTime(t)` - 格式化日期时间（YYYY-MM-DD HH:mm:ss）
-- `time.FormatTimestamp(t)` - 格式化时间戳
-- `time.Parse(layout, value)` - 解析时间字符串
-- `time.ParseDate(value)` - 解析日期字符串（YYYY-MM-DD）
-- `time.ParseTime(value)` - 解析时间字符串（HH:mm:ss）
-- `time.ParseDateTime(value)` - 解析日期时间字符串（YYYY-MM-DD HH:mm:ss）
-- `time.AddDays(t, days)` - 添加天数
-- `time.AddHours(t, hours)` - 添加小时
-- `time.AddMinutes(t, minutes)` - 添加分钟
-- `time.DiffDays(t1, t2)` - 计算天数差
-- `time.DiffHours(t1, t2)` - 计算小时差
-- `time.DiffMinutes(t1, t2)` - 计算分钟差
-- `time.IsToday(t)` - 判断是否为今天
-- `time.IsYesterday(t)` - 判断是否为昨天
-- `time.IsTomorrow(t)` - 判断是否为明天
-- `time.StartOfDay(t)` - 获取一天的开始时间
-- `time.EndOfDay(t)` - 获取一天的结束时间
-- `time.StartOfWeek(t)` - 获取一周的开始时间（周一）
-- `time.StartOfMonth(t)` - 获取一月的开始时间
-- `time.StartOfYear(t)` - 获取一年的开始时间
 
 ### 🔐 加密工具 (crypto)
 - `crypto.SHA1(data)` - 计算字节数组的 SHA1 值
